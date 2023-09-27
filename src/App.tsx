@@ -322,6 +322,18 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="favicon.ico"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
                           <WorkIcon />
                         </Avatar>
                       </ListItemAvatar>
