@@ -1,0 +1,93 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.chip-party {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: left;
+  margin: 10px;
+}
+
+.chip-party > .MuiChip-root {
+  margin: 0px 8px 8px 0px;
+}
+
+.form {
+  display: inline-block;
+  justify-content: center;
+}
+
+.form input {
+  width: 250px;
+  margin: 10px;
+}
+
+.name {
+  font-size: 2.5em;
+  text-transform: uppercase;
+  margin-top: 10px;
+  color: "white";
+}
+
+.role {
+  font-size: 1.8em;
+  color: "white";
+  margin-bottom: 10px;
+}
+
+.section-header {
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 100;
+  font-family: Calibri, "Trebuchet MS", sans-serif;
+  color: #fc1;
+  margin: 0;
+}
+
+.section-header.elevated {
+  margin-top: -48px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#qr-code {
+  position: absolute;
+  top: 55px;
+  right: 10px;
+  width: 48px;
+  height: 48px;
+}
