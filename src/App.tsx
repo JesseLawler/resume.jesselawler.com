@@ -31,9 +31,18 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Card, Row } from "react-bootstrap";
 import "./App.css";
+import CheckIcon from "@mui/icons-material/Check";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CodeIcon from "@mui/icons-material/Code";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ImageIcon from "@mui/icons-material/Image";
 import WorkIcon from "@mui/icons-material/Work";
+import TableRowsIcon from "@mui/icons-material/TableRows";
+import SchoolIcon from "@mui/icons-material/School";
 import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
+import { Experience, Month } from "./interfaces";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -50,6 +59,112 @@ type StateProps = {
 
 const LIFT_OF_AVATAR = 98;
 const AUTO_PING_INTERVAL_MS = 5000; // 5 seconds
+const COLOR_HIGHLIGHT = "#FFD700";
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+const EXPERIENCES: Experience[] = [
+  {
+    company: "Oregon State University",
+    role: "Student",
+    description:
+      "I'm currently a student at Oregon State University, studying Computer Science. I'm in my final year, and will be graduating in June 2022.",
+    start: { year: 2019, month: 9 },
+    end: { year: 2022, month: 6 },
+  },
+  {
+    company: "Scribeware",
+    role: "Lead React-Native Developer",
+    description: `Executed major version upgrade to multiplatform (iOS, Android, Mac + Windows desktop) React-Native/React application with Firebase backend and heavy data-sync requirements.  Designed and implemented new functional components; removed performance bottlenecks; massively simplified and harmonized a large codebase that had grown “organically” for ~10 years.
+This role was a 6-month contract.`,
+    start: { year: 2023, month: 3 },
+    end: { year: 2023, month: 8 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+  {
+    company: "xxxxxxxx",
+    role: "xxxxxxxx",
+    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    start: { year: 1979, month: 9 },
+    end: { year: 1979, month: 6 },
+  },
+];
+const SKILLS = [
+  "React-Native",
+  "React",
+  "TypeScript",
+  "Node.js",
+  "AWS Serverless (SAM, CloudFormation, Cognito, etc.)",
+  "CI/CD (Bitbucket Pipelines, Postman)",
+  "SQL",
+  "Objective C",
+  "Sails.js",
+  "Bash",
+  "HTML",
+  "CSS",
+  "SCSS",
+  "LESS",
+  "Google Sheets scripting",
+  "yarn",
+];
+//   and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
+
+const getLongMonthName = (date: any) => monthNames[date.getMonth()];
+
+const getShortMonthName = (date: any) =>
+  monthNames[date.getMonth()].substring(0, 3);
 
 const generateRandomBool = () => Math.random() < 0.5;
 
@@ -137,12 +252,35 @@ class App extends Component<any, any> {
         >
           <Box sx={{ flexGrow: 1 }} style={{}}>
             <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <h1 className="section-header elevated">Experience</h1>
-                <Item>xs=4</Item>
+              <Grid item xs={4} className="experience">
+                <h1 className="section-header elevated">
+                  <CheckCircleIcon className="icon" />
+                  Experience
+                </h1>
+                {EXPERIENCES.map((e: Experience) => (
+                  <Item>
+                    <div className="company">{e.company}</div>
+                    <div className="role">{e.role}</div>
+                    <div className="period">
+                      {`${getLongMonthName(
+                        new Date(e.start.year, e.start.month)
+                      )} ${e.start.year}  - ${getLongMonthName(
+                        new Date(e.end.year, e.end.month)
+                      )} ${e.end.year}`}
+                    </div>
+                    <div className="description">{e.description}</div>
+                  </Item>
+                ))}
               </Grid>
-              <Grid item xs={4} style={{ position: "relative" }}>
-                <Item>
+              <Grid
+                item
+                xs={4}
+                style={{
+                  position: "relative",
+                }}
+                className="main"
+              >
+                <Item style={{ backgroundColor: COLOR_HIGHLIGHT + "33" }}>
                   <Avatar
                     alt="Jesse Lawler"
                     src="/images/Jesse-Lawler-square.jpg"
@@ -169,7 +307,10 @@ class App extends Component<any, any> {
                           <ImageIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Phone" secondary="Jan 9, 2014" />
+                      <ListItemText
+                        primary="Phone"
+                        secondary="(323) 513-8779"
+                      />
                     </ListItem>
                     <Divider />
                     <ListItem>
@@ -178,7 +319,10 @@ class App extends Component<any, any> {
                           <WorkIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Email" secondary="Jan 7, 2014" />
+                      <ListItemText
+                        primary="Email"
+                        secondary="business@JesseLawler.com"
+                      />
                     </ListItem>
                     <Divider />
                     <ListItem>
@@ -189,7 +333,7 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         primary="GitHub"
-                        secondary="July 20, 2014"
+                        secondary="https://github.com/JesseLawler"
                       />
                     </ListItem>
                     <Divider />
@@ -201,7 +345,7 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         primary="LinkedIn"
-                        secondary="July 20, 2014"
+                        secondary="https://www.linkedin.com/in/jesselawler/"
                       />
                     </ListItem>
                     <Divider />
@@ -220,25 +364,36 @@ class App extends Component<any, any> {
                 </Item>
               </Grid>
               <Grid item xs={4}>
-                <h1 className="section-header elevated">Skills</h1>
+                <h1 className="section-header elevated">
+                  <CodeIcon className="icon" />
+                  Skills
+                </h1>
                 <div className="chip-party">
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
+                  {SKILLS.map((skill: string) => (
+                    <Chip
+                      label={skill}
+                      //variant="outlined"
+                    />
+                  ))}
                 </div>
               </Grid>
               <Grid item xs={4}>
-                <h1 className="section-header">Humanity</h1>
-                <h1 className="section-header">Credentials</h1>
-                <h1 className="section-header">Map Pointer</h1>
-                <h1 className="section-header">To-Do's</h1>
+                <h1 className="section-header">
+                  <PsychologyAltIcon className="icon" />
+                  Humanity
+                </h1>
+                <h1 className="section-header">
+                  <SchoolIcon className="icon" />
+                  Credentials
+                </h1>
+                <h1 className="section-header">
+                  <LocationOnIcon className="icon" />
+                  Map Pointer
+                </h1>
+                <h1 className="section-header">
+                  <CheckIcon className="icon" />
+                  To-Do's
+                </h1>
                 <Item>
                   <List
                     sx={{
