@@ -33,16 +33,26 @@ import { Card, Row } from "react-bootstrap";
 import "./App.css";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import CodeIcon from "@mui/icons-material/Code";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ImageIcon from "@mui/icons-material/Image";
 import WorkIcon from "@mui/icons-material/Work";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 import SchoolIcon from "@mui/icons-material/School";
-import BeachAccessIcon from "@mui/icons-material/BeachAccess";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import FaceIcon from "@mui/icons-material/Face";
+import TwitterIcon from "@mui/icons-material/Twitter";
+import StarsIcon from "@mui/icons-material/Stars";
+import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
+import MyLocationIcon from "@mui/icons-material/MyLocation";
+import MapIcon from "@mui/icons-material/Map";
 import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
-import { Experience, Month } from "./interfaces";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import { Experience, Month, Skill } from "./interfaces";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -60,6 +70,7 @@ type StateProps = {
 const LIFT_OF_AVATAR = 98;
 const AUTO_PING_INTERVAL_MS = 5000; // 5 seconds
 const COLOR_HIGHLIGHT = "#FFD700";
+const MILES_AWAY: number = 1234;
 const monthNames = [
   "January",
   "February",
@@ -74,17 +85,20 @@ const monthNames = [
   "November",
   "December",
 ];
+
+const EDUCATION: Experience[] = [
+  {
+    institution: "University of Oregon",
+    role: "Computer Science, Bachelor of Arts",
+    description: `I attended Clark Honors College - a highly selective sub-unit within the larger university - graduating with a 3.98 final cumulative GPA.  (Despite collegiate “grade inflation” in recent years, back in 1997 a 3.98 GPA meant something.)`,
+    start: { year: 1994, month: 9 },
+    end: { year: 1997, month: 5 },
+  },
+];
+
 const EXPERIENCES: Experience[] = [
   {
-    company: "Oregon State University",
-    role: "Student",
-    description:
-      "I'm currently a student at Oregon State University, studying Computer Science. I'm in my final year, and will be graduating in June 2022.",
-    start: { year: 2019, month: 9 },
-    end: { year: 2022, month: 6 },
-  },
-  {
-    company: "Scribeware",
+    institution: "Scribeware",
     role: "Lead React-Native Developer",
     description: `Executed major version upgrade to multiplatform (iOS, Android, Mac + Windows desktop) React-Native/React application with Firebase backend and heavy data-sync requirements.  Designed and implemented new functional components; removed performance bottlenecks; massively simplified and harmonized a large codebase that had grown “organically” for ~10 years.
 This role was a 6-month contract.`,
@@ -92,74 +106,62 @@ This role was a 6-month contract.`,
     end: { year: 2023, month: 8 },
   },
   {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
+    institution: "Podzilla",
+    role: "Senior Full-Stack Engineer",
+    description:
+      "Soup-to-nuts system architecture + implementation for React-Native “podcatcher” mobile app including custom API, third-party integrations, serverless back-end, public-facing UI/UX, error-handling of public RSS data, automated test suite.",
+    start: { year: 2019, month: 12 },
+    end: { year: 2023, month: 2 },
   },
   {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
+    institution: "Evil Genius Technologies",
+    role: "Lead Mobile Developer",
+    description: `Custom design of 30+ iOS apps for domestic + international clients, private + nonprofit.
+
+Full-stack coding (and team oversight) using primary tech stack: Objective-C, Amazon Web Services, ASP.NET, SQL Server, HTML/CSS, innumerable API integrations per client specs.`,
+    start: { year: 2010, month: 11 },
+    end: { year: 2016, month: 8 },
   },
   {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
+    institution: "Smart Drug Smarts (podcast)",
+    role: "Host/Interviewer, Producer",
+    description: `I was a podcaster before it was cool.  5+ million downloads, reaching ~35,000 per week at my peak. 
+Did related programming, including an extremely customized Wordpress site (PHP, MySQL) plus a dedicated iOS app (Objective-C).`,
+    start: { year: 2012, month: 11 },
+    end: { year: 2018, month: 5 },
   },
   {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
-  },
-  {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
-  },
-  {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
-  },
-  {
-    company: "xxxxxxxx",
-    role: "xxxxxxxx",
-    description: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    start: { year: 1979, month: 9 },
-    end: { year: 1979, month: 6 },
+    institution: "Antibody Films, Los Angeles, CA",
+    role: "Film Producer",
+    description: `Financed + Produced various “schlock” films, in genres ranging from kids comedy to fast-zombie horror.   
+Oversaw editing + visual effects (Final Cut Pro) and associated marketing on the teenage web (ASP.NET, Wordpress, etc.).`,
+    start: { year: 2005, month: 10 },
+    end: { year: 2011, month: 12 },
   },
 ];
-const SKILLS = [
-  "React-Native",
-  "React",
-  "TypeScript",
-  "Node.js",
-  "AWS Serverless (SAM, CloudFormation, Cognito, etc.)",
-  "CI/CD (Bitbucket Pipelines, Postman)",
-  "SQL",
-  "Objective C",
-  "Sails.js",
-  "Bash",
-  "HTML",
-  "CSS",
-  "SCSS",
-  "LESS",
-  "Google Sheets scripting",
-  "yarn",
+const SKILLS: Skill[] = [
+  { name: "React-Native" },
+  { name: "React" },
+  { name: "TypeScript" },
+  { name: "Node.js" },
+  { name: "AWS Serverless (SAM, CloudFormation, Cognito, etc.)" },
+  { name: "CI/CD (Bitbucket Pipelines, Postman)" },
+  { name: "SQL" },
+  { name: "Objective C" },
+  { name: "Sails.js" },
+  { name: "Bash" },
+  { name: "HTML" },
+  { name: "CSS" },
+  { name: "SCSS" },
+  { name: "LESS" },
+  { name: "Google Sheets scripting" },
+  { name: "yarn" },
 ];
 //   and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
+
+const formatInteger = (num: number) => {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
 
 const getLongMonthName = (date: any) => monthNames[date.getMonth()];
 
@@ -170,6 +172,17 @@ const generateRandomBool = () => Math.random() < 0.5;
 
 const generateRandomInt = (min: number, max: number) =>
   Math.floor(Math.random() * (max - min) + min);
+
+const icon = (iconName?: string) => {
+  switch (iconName) {
+    case "face":
+      return <FaceIcon />;
+    case "code":
+      return <CodeIcon />;
+    default:
+      return <></>;
+  }
+};
 
 function Copyright() {
   return (
@@ -259,7 +272,7 @@ class App extends Component<any, any> {
                 </h1>
                 {EXPERIENCES.map((e: Experience) => (
                   <Item>
-                    <div className="company">{e.company}</div>
+                    <div className="institution">{e.institution}</div>
                     <div className="role">{e.role}</div>
                     <div className="period">
                       {`${getLongMonthName(
@@ -304,7 +317,7 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <ImageIcon />
+                          <PhoneAndroidIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -316,7 +329,7 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <WorkIcon />
+                          <AlternateEmailIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -328,7 +341,7 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <BeachAccessIcon />
+                          <GitHubIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -340,7 +353,7 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <BeachAccessIcon />
+                          <LinkedInIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -352,16 +365,52 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <BeachAccessIcon />
+                          <TwitterIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Location"
-                        secondary="Corvallis, Oregon"
+                        primary="Twitter"
+                        secondary="https://twitter.com/Lawlerpalooza"
                       />
                     </ListItem>
                   </List>
                 </Item>
+                <h1 className="section-header">
+                  <LocationOnIcon className="icon" style={{ width: 36 }} />
+                  Location
+                </h1>
+                <Item>
+                  <List
+                    sx={{
+                      width: "100%",
+                      maxWidth: 360,
+                      bgcolor: "background.paper",
+                    }}
+                  >
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <MyLocationIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Corvallis, Oregon"
+                        secondary={`${formatInteger(MILES_AWAY)} miles away`}
+                      />
+                    </ListItem>
+                  </List>
+                </Item>
+                <h1 className="section-header">
+                  <FavoriteBorderIcon className="icon" style={{ width: 32 }} />
+                  Humanity
+                </h1>
+                <div id="short-bio">
+                  I’ve bicycled from Los Angeles to Florida, use Photoshop at a
+                  professional level, and have hand-coded Bitcoin transactions.
+                  (Despite this, my kids still maintain I’m not all that cool.)
+                  Also, I wake up extremely early - basically living in the East
+                  Coast time zone from the West Coast.
+                </div>
               </Grid>
               <Grid item xs={4}>
                 <h1 className="section-header elevated">
@@ -369,27 +418,65 @@ class App extends Component<any, any> {
                   Skills
                 </h1>
                 <div className="chip-party">
-                  {SKILLS.map((skill: string) => (
+                  {SKILLS.map((skill: Skill) => (
                     <Chip
-                      label={skill}
+                      label={skill.name}
+                      icon={icon(skill.icon)}
                       //variant="outlined"
+                      //level?: number;
+                      //priority?: number;
+                      //url?: string;
+                      //icon?: string;
                     />
+                  ))}
+                </div>
+                <h1 className="section-header">
+                  <StarsIcon className="icon" />
+                  Awards
+                </h1>
+                <Item>
+                  <List
+                    sx={{
+                      width: "100%",
+                      maxWidth: 360,
+                      bgcolor: "background.paper",
+                    }}
+                  >
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Summa Cum Laude"
+                        secondary="University of Oregon, 1997"
+                      />
+                    </ListItem>
+                  </List>
+                </Item>
+                <h1 className="section-header">
+                  <SchoolIcon className="icon" />
+                  Education
+                </h1>
+                <div className="experience education">
+                  {EDUCATION.map((e: Experience) => (
+                    <Item>
+                      <div className="institution">{e.institution}</div>
+                      <div className="role">{e.role}</div>
+                      <div className="period">
+                        {`${getLongMonthName(
+                          new Date(e.start.year, e.start.month)
+                        )} ${e.start.year}  - ${getLongMonthName(
+                          new Date(e.end.year, e.end.month)
+                        )} ${e.end.year}`}
+                      </div>
+                      <div className="description">{e.description}</div>
+                    </Item>
                   ))}
                 </div>
               </Grid>
               <Grid item xs={4}>
-                <h1 className="section-header">
-                  <PsychologyAltIcon className="icon" />
-                  Humanity
-                </h1>
-                <h1 className="section-header">
-                  <SchoolIcon className="icon" />
-                  Credentials
-                </h1>
-                <h1 className="section-header">
-                  <LocationOnIcon className="icon" />
-                  Map Pointer
-                </h1>
                 <h1 className="section-header">
                   <CheckIcon className="icon" />
                   To-Do's
@@ -409,7 +496,7 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Google Fonts"
+                        primary="Icons in Chips"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
@@ -417,23 +504,11 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <ImageIcon />
+                          <MapIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Appropriate Icons"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Import Text"
+                        primary="Incorporate Google Maps"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
@@ -459,51 +534,6 @@ class App extends Component<any, any> {
                       <ListItemText
                         primary="Webification"
                         secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Icons in Chips"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="favicon.ico"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <WorkIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText primary="Work" secondary="Jan 7, 2014" />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <BeachAccessIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Vacation"
-                        secondary="July 20, 2014"
                       />
                     </ListItem>
                   </List>

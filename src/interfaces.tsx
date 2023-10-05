@@ -4,9 +4,18 @@ export interface Month {
 }
 
 export interface Experience {
-  company: string;
+  institution: string;
   role: string;
+  department?: string;
   description: string;
   start: Month;
   end: Month;
+}
+
+export interface Skill {
+  name: string;
+  level?: number;
+  priority?: number;
+  url?: string;
+  icon?: string;
 }
