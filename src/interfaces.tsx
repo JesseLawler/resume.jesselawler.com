@@ -1,3 +1,5 @@
+export const LOW_PRIORITY = 100;
+
 export interface Month {
   year: number;
   month: number;
@@ -14,7 +16,7 @@ export interface Experience {
 
 export interface Skill {
   name: string;
-  level?: number;
+  level?: number; // 0 - 10
   priority?: number;
   url?: string;
   icon?: string;

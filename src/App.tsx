@@ -43,16 +43,38 @@ import SchoolIcon from "@mui/icons-material/School";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
+import GoogleIcon from "@mui/icons-material/Google";
 import FaceIcon from "@mui/icons-material/Face";
+import HtmlIcon from "@mui/icons-material/Html";
 import TwitterIcon from "@mui/icons-material/Twitter";
+import AppleIcon from "@mui/icons-material/Apple";
 import StarsIcon from "@mui/icons-material/Stars";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
+import CssIcon from "@mui/icons-material/Css";
 import MapIcon from "@mui/icons-material/Map";
 import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import { Experience, Month, Skill } from "./interfaces";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import { Experience, LOW_PRIORITY, Month, Skill } from "./interfaces";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCoffee,
+  faDatabase,
+  faTerminal,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faAws,
+  faBitbucket,
+  faBitcoin,
+  faJs,
+  faLess,
+  faNodeJs,
+  faReact,
+  faSass,
+  faYarn,
+} from "@fortawesome/free-brands-svg-icons";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -140,22 +162,51 @@ Oversaw editing + visual effects (Final Cut Pro) and associated marketing on the
   },
 ];
 const SKILLS: Skill[] = [
-  { name: "React-Native" },
-  { name: "React" },
-  { name: "TypeScript" },
-  { name: "Node.js" },
-  { name: "AWS Serverless (SAM, CloudFormation, Cognito, etc.)" },
-  { name: "CI/CD (Bitbucket Pipelines, Postman)" },
-  { name: "SQL" },
-  { name: "Objective C" },
-  { name: "Sails.js" },
-  { name: "Bash" },
-  { name: "HTML" },
-  { name: "CSS" },
-  { name: "SCSS" },
-  { name: "LESS" },
-  { name: "Google Sheets scripting" },
-  { name: "yarn" },
+  {
+    name: "React-Native",
+    priority: 1,
+    level: 10,
+    url: "https://reactnative.dev/",
+    icon: "react",
+  },
+  {
+    name: "React",
+    priority: 1,
+    level: 8,
+    icon: "react",
+    url: "https://react.dev/",
+  },
+  {
+    name: "TypeScript",
+    priority: 1,
+    level: 9,
+    icon: "js",
+    url: "https://www.typescriptlang.org/",
+  }, // JESSEFIX logo
+  { name: "Node.js", level: 6, icon: "node-js", url: "https://nodejs.org/" },
+  {
+    name: "AWS Serverless (SAM, CloudFormation, Cognito, etc.)",
+    icon: "aws",
+    url: "https://aws.amazon.com/what-is-aws/",
+  },
+  { name: "CI/CD (Bitbucket Pipelines)", icon: "bitbucket" },
+  { name: "Postman", icon: "postman", url: "https://www.postman.com/" },
+  { name: "SQL", icon: "database", url: "https://en.wikipedia.org/wiki/SQL" },
+  { name: "Objective-C", priority: 2, icon: "apple" },
+  { name: "Sails.js", priority: 3, icon: "js", url: "https://sailsjs.com/" }, // JESSEFIX logo
+  { name: "Bitcoin", icon: "bitcoin", url: "https://bitcoin.org/" },
+  { name: "Bash", icon: "terminal" },
+  { name: "HTML", icon: "html", url: "https://en.wikipedia.org/wiki/HTML" },
+  {
+    name: "CSS",
+    priority: 2,
+    icon: "css",
+    url: "https://en.wikipedia.org/wiki/CSS",
+  },
+  { name: "SASS", priority: 2, icon: "sass", url: "https://sass-lang.com/" },
+  { name: "LESS", priority: 2, icon: "less", url: "https://lesscss.org/" },
+  { name: "Google Sheets scripting", icon: "google" },
+  { name: "Yarn", icon: "yarn", url: "https://yarnpkg.com/" },
 ];
 //   and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
@@ -175,12 +226,42 @@ const generateRandomInt = (min: number, max: number) =>
 
 const icon = (iconName?: string) => {
   switch (iconName) {
-    case "face":
-      return <FaceIcon />;
+    case "apple":
+      return <AppleIcon />;
+    case "aws":
+      return <FontAwesomeIcon icon={faAws} />;
+    case "bitbucket":
+      return <FontAwesomeIcon icon={faBitbucket} />;
+    case "bitcoin":
+      return <FontAwesomeIcon icon={faBitcoin} />;
     case "code":
       return <CodeIcon />;
+    case "css":
+      return <CssIcon />;
+    case "database":
+      return <FontAwesomeIcon icon={faDatabase} />;
+    case "html":
+      return <HtmlIcon />;
+    case "face":
+      return <FaceIcon />;
+    case "google":
+      return <GoogleIcon />;
+    case "js":
+      return <FontAwesomeIcon icon={faJs} />;
+    case "less":
+      return <FontAwesomeIcon icon={faLess} />;
+    case "node-js":
+      return <FontAwesomeIcon icon={faNodeJs} />;
+    case "react":
+      return <FontAwesomeIcon icon={faReact} />;
+    case "sass":
+      return <FontAwesomeIcon icon={faSass} />;
+    case "terminal":
+      return <FontAwesomeIcon icon={faTerminal} />;
+    case "yarn":
+      return <FontAwesomeIcon icon={faYarn} />;
     default:
-      return <></>;
+      return <FontAwesomeIcon icon={faCoffee} style={{ color: "red" }} />;
   }
 };
 
@@ -194,6 +275,11 @@ function Copyright() {
       {new Date().getFullYear()}.
     </Typography>
   );
+}
+
+function openInNewTab(url: string) {
+  var win = window.open(url, "_blank");
+  win!.focus();
 }
 
 class App extends Component<any, any> {
@@ -418,15 +504,33 @@ class App extends Component<any, any> {
                   Skills
                 </h1>
                 <div className="chip-party">
-                  {SKILLS.map((skill: Skill) => (
+                  {SKILLS.sort((a: Skill, b: Skill) => {
+                    return (a.priority ?? LOW_PRIORITY) >
+                      (b.priority ?? LOW_PRIORITY)
+                      ? 1
+                      : a.priority === b.priority
+                      ? 0
+                      : -1;
+                  }).map((skill: Skill) => (
                     <Chip
                       label={skill.name}
                       icon={icon(skill.icon)}
-                      //variant="outlined"
-                      //level?: number;
-                      //priority?: number;
-                      //url?: string;
-                      //icon?: string;
+                      variant={
+                        skill.priority === undefined ? "outlined" : "filled"
+                      }
+                      style={{
+                        backgroundColor:
+                          skill.url === undefined
+                            ? "red"
+                            : `rgba(80, 80, 80, ` +
+                              (skill.level ?? 3) / 10 +
+                              `)`,
+                      }}
+                      onClick={
+                        skill.url === undefined
+                          ? undefined
+                          : () => openInNewTab(skill.url!)
+                      }
                     />
                   ))}
                 </div>
@@ -496,7 +600,7 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Icons in Chips"
+                        primary="Beautified Header"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
@@ -533,6 +637,18 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         primary="Webification"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="AWS Serverless progress bars"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>

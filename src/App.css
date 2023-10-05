@@ -20,6 +20,18 @@
   margin: 0px 8px 8px 0px;
 }
 
+.MuiListItem-root {
+  overflow: hidden;
+}
+
+.MuiChip-root > .svg-inline--fa {
+  padding-left: 5px;
+}
+
+.MuiChip-root > .MuiSvgIcon-root {
+  scale: 0.9;
+}
+
 .form {
   display: inline-block;
   justify-content: center;
