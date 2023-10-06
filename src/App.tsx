@@ -370,7 +370,7 @@ class App extends Component<any, any> {
         >
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={12} style={{ marginBottom: 36, zIndex: -1 }}>
                 <FauxGithubHeader />
               </Grid>
               <Grid item xs={4} className="experience">

@@ -21,3 +21,7 @@ export interface Skill {
   url?: string;
   icon?: string;
 }
+
+export interface Week {
+  sunday: Date;
+}
