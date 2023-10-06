@@ -75,6 +75,7 @@ import {
   faSass,
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
+import FauxGithubHeader from "./faux-github-header";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -189,13 +190,22 @@ const SKILLS: Skill[] = [
     icon: "aws",
     url: "https://aws.amazon.com/what-is-aws/",
   },
-  { name: "CI/CD (Bitbucket Pipelines)", icon: "bitbucket" },
+  {
+    name: "CI/CD (Bitbucket Pipelines)",
+    icon: "bitbucket",
+    url: "https://bitbucket.org/product/features/pipelines",
+  },
   { name: "Postman", icon: "postman", url: "https://www.postman.com/" },
   { name: "SQL", icon: "database", url: "https://en.wikipedia.org/wiki/SQL" },
-  { name: "Objective-C", priority: 2, icon: "apple" },
+  {
+    name: "Objective-C",
+    priority: 2,
+    icon: "apple",
+    url: "https://en.wikipedia.org/wiki/Objective-C",
+  },
   { name: "Sails.js", priority: 3, icon: "js", url: "https://sailsjs.com/" }, // JESSEFIX logo
   { name: "Bitcoin", icon: "bitcoin", url: "https://bitcoin.org/" },
-  { name: "Bash", icon: "terminal" },
+  { name: "Bash", icon: "terminal", url: "https://www.gnu.org/software/bash/" },
   { name: "HTML", icon: "html", url: "https://en.wikipedia.org/wiki/HTML" },
   {
     name: "CSS",
@@ -205,10 +215,19 @@ const SKILLS: Skill[] = [
   },
   { name: "SASS", priority: 2, icon: "sass", url: "https://sass-lang.com/" },
   { name: "LESS", priority: 2, icon: "less", url: "https://lesscss.org/" },
-  { name: "Google Sheets scripting", icon: "google" },
+  {
+    name: "Google Cloud Platform",
+    icon: "google",
+    url: "https://cloud.google.com/",
+  },
+  {
+    name: "Firebase",
+    icon: "firebase",
+    url: "https://firebase.google.com/",
+  },
   { name: "Yarn", icon: "yarn", url: "https://yarnpkg.com/" },
 ];
-//   and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
+// JESSEFIX and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
 const formatInteger = (num: number) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -346,11 +365,14 @@ class App extends Component<any, any> {
             marginLeft: "auto",
             marginRight: "auto",
             padding: 20,
-            paddingTop: 125,
+            paddingTop: 15,
           }}
         >
-          <Box sx={{ flexGrow: 1 }} style={{}}>
+          <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <FauxGithubHeader />
+              </Grid>
               <Grid item xs={4} className="experience">
                 <h1 className="section-header elevated">
                   <CheckCircleIcon className="icon" />

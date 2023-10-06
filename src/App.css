@@ -152,6 +152,26 @@
   }
 }
 
+#faux-github-header tfoot {
+  color: #ffffffaa;
+  font-size: 12px;
+  line-height: 2.5em;
+  text-align: left;
+}
+
+#faux-github-header #legend {
+  float: right;
+  display: flex;
+}
+
+#faux-github-header #legend span {
+  margin: 2px;
+}
+
+#faux-github-header #legend .sample-day {
+  margin-top: 11px;
+}
+
 #qr-code {
   position: absolute;
   top: 55px;
