@@ -181,9 +181,9 @@ const SKILLS: Skill[] = [
     name: "TypeScript",
     priority: 1,
     level: 9,
-    icon: "js",
+    icon: "typescript",
     url: "https://www.typescriptlang.org/",
-  }, // JESSEFIX logo
+  },
   { name: "Node.js", level: 6, icon: "node-js", url: "https://nodejs.org/" },
   {
     name: "AWS Serverless (SAM, CloudFormation, Cognito, etc.)",
@@ -203,7 +203,12 @@ const SKILLS: Skill[] = [
     icon: "apple",
     url: "https://en.wikipedia.org/wiki/Objective-C",
   },
-  { name: "Sails.js", priority: 3, icon: "js", url: "https://sailsjs.com/" }, // JESSEFIX logo
+  {
+    name: "Sails.js",
+    priority: 3,
+    icon: "sails.js",
+    url: "https://sailsjs.com/",
+  },
   { name: "Bitcoin", icon: "bitcoin", url: "https://bitcoin.org/" },
   { name: "Bash", icon: "terminal", url: "https://www.gnu.org/software/bash/" },
   { name: "HTML", icon: "html", url: "https://en.wikipedia.org/wiki/HTML" },
@@ -263,6 +268,14 @@ const icon = (iconName?: string) => {
       return <HtmlIcon />;
     case "face":
       return <FaceIcon />;
+    case "firebase":
+      return (
+        <img
+          src="/images/logos/firebase-bw.png"
+          alt="Firebase logo"
+          style={{ height: 18, marginLeft: 10 }}
+        />
+      );
     case "google":
       return <GoogleIcon />;
     case "js":
@@ -271,12 +284,36 @@ const icon = (iconName?: string) => {
       return <FontAwesomeIcon icon={faLess} />;
     case "node-js":
       return <FontAwesomeIcon icon={faNodeJs} />;
+    case "postman":
+      return (
+        <img
+          src="/images/logos/postman-bw.png"
+          alt="Postman logo"
+          style={{ height: 17, marginLeft: 7 }}
+        />
+      );
     case "react":
       return <FontAwesomeIcon icon={faReact} />;
+    case "sails.js":
+      return (
+        <img
+          src="/images/logos/sails.js-bw.png"
+          alt="Sails.js logo"
+          style={{ height: 15, marginLeft: 8 }}
+        />
+      );
     case "sass":
       return <FontAwesomeIcon icon={faSass} />;
     case "terminal":
       return <FontAwesomeIcon icon={faTerminal} />;
+    case "typescript":
+      return (
+        <img
+          src="/images/logos/typescript-bw.png"
+          alt="TypeScript logo"
+          style={{ height: 15, marginLeft: 11 }}
+        />
+      );
     case "yarn":
       return <FontAwesomeIcon icon={faYarn} />;
     default:
@@ -401,7 +438,7 @@ class App extends Component<any, any> {
                 }}
                 className="main"
               >
-                <Item style={{ backgroundColor: COLOR_HIGHLIGHT + "33" }}>
+                <Item style={{ backgroundColor: "#00445522" }}>
                   <Avatar
                     alt="Jesse Lawler"
                     src="/images/Jesse-Lawler-square.jpg"
@@ -670,6 +707,30 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        primary="Day Popover on GitHub days"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Valid QR code"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
                         primary="AWS Serverless progress bars"
                         secondary="Jan 9, 2014"
                       />
@@ -678,24 +739,9 @@ class App extends Component<any, any> {
                 </Item>
               </Grid>
               <Grid item xs={4}>
-                <Item style={{ height: 900 }}>xs=4</Item>
-              </Grid>
-              <Grid item xs={4}>
                 <Item>
                   <Switch defaultChecked />
                 </Item>
-              </Grid>
-              <Grid item xs={4}>
-                <Item>
-                  <Chip label="Chip Filled" />
-                  <Chip label="Chip Outlined" variant="outlined" />
-                </Item>
-              </Grid>
-              <Grid item xs={4}>
-                <Item>xs=4</Item>
-              </Grid>
-              <Grid item xs={4}>
-                <Item>xs=4</Item>
               </Grid>
             </Grid>
           </Box>
