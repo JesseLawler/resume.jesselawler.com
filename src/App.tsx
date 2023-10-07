@@ -146,19 +146,19 @@ const CONTACT_LIST: MeansOfContact[] = [
   },
   {
     name: "GitHub",
-    value: " https://github.com/JesseLawler",
+    value: "github.com/JesseLawler",
     icon: "github",
     url: "https://github.com/JesseLawler",
   },
   {
     name: "LinkedIn",
-    value: "https://www.linkedin.com/in/jesselawler/",
+    value: "linkedin.com/in/jesselawler",
     icon: "linkedin",
     url: "https://www.linkedin.com/in/jesselawler/",
   },
   {
     name: "Twitter",
-    value: "https://twitter.com/Lawlerpalooza",
+    value: "twitter.com/Lawlerpalooza",
     icon: "twitter",
     url: "https://twitter.com/Lawlerpalooza",
   },
@@ -543,9 +543,7 @@ class App extends Component<any, any> {
                             }}
                           >
                             <ListItem>
-                              <ListItemAvatar>
-                                <Avatar>{icon(contact.icon)}</Avatar>
-                              </ListItemAvatar>
+                              <div className="icon">{icon(contact.icon)}</div>
                               <ListItemText
                                 primary={contact.name}
                                 secondary={contact.value}
@@ -574,11 +572,9 @@ class App extends Component<any, any> {
                     }}
                   >
                     <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <MapIcon />
-                        </Avatar>
-                      </ListItemAvatar>
+                      <div className="icon">
+                        <MyLocationIcon />
+                      </div>
                       <ListItemText
                         primary="Corvallis, Oregon"
                         secondary={`${formatInteger(MILES_AWAY)} miles away`}
@@ -661,13 +657,12 @@ class App extends Component<any, any> {
                       maxWidth: 360,
                       bgcolor: "background.paper",
                     }}
+                    id="awards"
                   >
                     <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <FontAwesomeIcon icon={faUserGraduate} />
-                        </Avatar>
-                      </ListItemAvatar>
+                      <div className="icon">
+                        <FontAwesomeIcon icon={faUserGraduate} />
+                      </div>
                       <ListItemText
                         primary="Summa Cum Laude"
                         secondary="University of Oregon, 1997"
@@ -683,11 +678,9 @@ class App extends Component<any, any> {
                       }}
                     >
                       <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
-                          </Avatar>
-                        </ListItemAvatar>
+                        <div className="icon">
+                          <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
+                        </div>
 
                         <ListItemText
                           primary="Ordained Minister"
@@ -695,23 +688,22 @@ class App extends Component<any, any> {
                         />
                       </ListItem>
                     </a>
-                    <ListItem style={{ display: "none" }}>
-                      <a
-                        onClick={() => {
-                          window.open("https://birdsarentreal.com/", "_blank");
-                        }}
-                      >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
-                          </Avatar>
-                        </ListItemAvatar>
-                      </a>
-                      <ListItemText
-                        primary="Activist of the Year, 2021"
-                        secondary="Birds Aren't Real"
-                      />
-                    </ListItem>
+                    <a
+                      onClick={() => {
+                        window.open("https://birdsarentreal.com/", "_blank");
+                      }}
+                    >
+                      <ListItem style={{ display: "none" }}>
+                        <div className="icon">
+                          <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
+                        </div>
+
+                        <ListItemText
+                          primary="Activist of the Year, 2021"
+                          secondary="Birds Aren't Real"
+                        />
+                      </ListItem>
+                    </a>
                   </List>
                 </Item>
                 <h1 className="section-header">

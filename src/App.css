@@ -123,6 +123,21 @@ body {
   margin-bottom: 5px;
 }
 
+.MuiListItemText-root {
+  width: 100%;
+}
+
+.MuiListItem-root .icon {
+  margin-left: 0px;
+  margin-right: 15px;
+  text-align: center;
+  width: 30px;
+}
+
+.MuiListItem-root .icon svg {
+  scale: 1.3;
+}
+
 a .MuiListItemText-root {
   text-decoration: none !important;
   cursor: pointer;
@@ -184,6 +199,10 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   to {
     transform: rotate(360deg);
   }
+}
+
+#awards .MuiListItem-root .icon svg {
+  scale: 1.6;
 }
 
 #faux-github-header thead th {
