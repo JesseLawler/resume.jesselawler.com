@@ -77,6 +77,8 @@ import {
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
 import FauxGithubHeader from "./faux-github-header";
+import SimpleMap from "./SimpleMap";
+import { GpsCoords } from "./SimpleMap";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -109,6 +111,16 @@ const monthNames = [
   "November",
   "December",
 ];
+
+const CORVALLIS_CHIPOTLE: GpsCoords = {
+  lat: 44.56939681150158,
+  lng: -123.27912127517598,
+}; // Chipotle Mexican Grill
+
+const CORVALLIS_DUTCH_BROS: GpsCoords = {
+  lat: 44.5680629888922,
+  lng: -123.26066771576237,
+}; // Dutch Bros Coffee
 
 const EDUCATION: Experience[] = [
   {
@@ -450,7 +462,7 @@ class App extends Component<any, any> {
                       marginTop: -LIFT_OF_AVATAR,
                     }}
                   />
-                  <img src="/images/qr-code.webp" alt="QR code" id="qr-code" />
+                  <img src="/images/qr-code.png" alt="QR code" id="qr-code" />
                   <div className="name">Jesse Lawler</div>
                   <div className="role">Full Stack Developer</div>
                   <List
@@ -531,12 +543,13 @@ class App extends Component<any, any> {
                       width: "100%",
                       maxWidth: 360,
                       bgcolor: "background.paper",
+                      paddingBottom: 0,
                     }}
                   >
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <MyLocationIcon />
+                          <MapIcon />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -544,6 +557,22 @@ class App extends Component<any, any> {
                         secondary={`${formatInteger(MILES_AWAY)} miles away`}
                       />
                     </ListItem>
+                    <div className="incomplete">How far away is this?</div>
+                    <SimpleMap
+                      //center={CORVALLIS_CHIPOTLE}
+                      bounds={{
+                        nw: CORVALLIS_CHIPOTLE,
+                        se: CORVALLIS_DUTCH_BROS,
+                      }}
+                      height={90}
+                      //width={"100%"}
+                      style={
+                        {
+                          //marginLeft: "auto",
+                          //marginRight: "auto",
+                        }
+                      }
+                    />
                   </List>
                 </Item>
                 <h1 className="section-header">
@@ -656,18 +685,6 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <MapIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Incorporate Google Maps"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
                           <ImageIcon />
                         </Avatar>
                       </ListItemAvatar>
@@ -738,6 +755,7 @@ class App extends Component<any, any> {
           />
         </div>
         <hr />
+
         <Box
           component="form"
           sx={{

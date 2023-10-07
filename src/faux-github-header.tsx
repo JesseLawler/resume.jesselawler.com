@@ -207,7 +207,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
             <td colSpan={numWeeks + 1} style={{ verticalAlign: "middle" }}>
               <Tooltip
                 title={
-                  "This isn't real data. I just think it looks cool. Design inspired by GitHub."
+                  "This isn't real data. I just think it looks cool. Design inspiration: GitHub"
                 }
                 placement="top"
               >
