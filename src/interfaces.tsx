@@ -25,3 +25,10 @@ export interface Skill {
 export interface Week {
   sunday: Date;
 }
+
+export interface MeansOfContact {
+  name: string;
+  value: string;
+  icon: string;
+  url?: string;
+}

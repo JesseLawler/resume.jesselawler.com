@@ -57,11 +57,18 @@ import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import { Experience, LOW_PRIORITY, Month, Skill } from "./interfaces";
+import {
+  Experience,
+  LOW_PRIORITY,
+  MeansOfContact,
+  Month,
+  Skill,
+} from "./interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoffee,
   faDatabase,
+  faSpaghettiMonsterFlying,
   faTerminal,
   faUserGraduate,
 } from "@fortawesome/free-solid-svg-icons";
@@ -123,6 +130,39 @@ const CORVALLIS_DUTCH_BROS: GpsCoords = {
   lat: 44.5680629888922,
   lng: -123.26066771576237,
 }; // Dutch Bros Coffee
+
+const CONTACT_LIST: MeansOfContact[] = [
+  {
+    name: "Phone",
+    value: "(323) 513-8779",
+    icon: "phone",
+    url: "phone:3235138779",
+  },
+  {
+    name: "Email",
+    value: "business@JesseLawler.com",
+    icon: "email",
+    url: "mailto:business@JesseLawler.com",
+  },
+  {
+    name: "GitHub",
+    value: " https://github.com/JesseLawler",
+    icon: "github",
+    url: "https://github.com/JesseLawler",
+  },
+  {
+    name: "LinkedIn",
+    value: "https://www.linkedin.com/in/jesselawler/",
+    icon: "linkedin",
+    url: "https://www.linkedin.com/in/jesselawler/",
+  },
+  {
+    name: "Twitter",
+    value: "https://twitter.com/Lawlerpalooza",
+    icon: "twitter",
+    url: "https://twitter.com/Lawlerpalooza",
+  },
+];
 
 const EDUCATION: Experience[] = [
   {
@@ -279,6 +319,8 @@ const icon = (iconName?: string) => {
       return <CssIcon />;
     case "database":
       return <FontAwesomeIcon icon={faDatabase} />;
+    case "email":
+      return <AlternateEmailIcon />;
     case "html":
       return <HtmlIcon />;
     case "face":
@@ -291,14 +333,20 @@ const icon = (iconName?: string) => {
           style={{ height: 18, marginLeft: 10 }}
         />
       );
+    case "github":
+      return <GitHubIcon />;
     case "google":
       return <GoogleIcon />;
     case "js":
       return <FontAwesomeIcon icon={faJs} />;
     case "less":
       return <FontAwesomeIcon icon={faLess} />;
+    case "linkedin":
+      return <LinkedInIcon />;
     case "node-js":
       return <FontAwesomeIcon icon={faNodeJs} />;
+    case "phone":
+      return <PhoneAndroidIcon />;
     case "postman":
       return (
         <img
@@ -329,6 +377,8 @@ const icon = (iconName?: string) => {
           style={{ height: 15, marginLeft: 11 }}
         />
       );
+    case "twitter":
+      return <TwitterIcon />;
     case "yarn":
       return <FontAwesomeIcon icon={faYarn} />;
     default:
@@ -484,65 +534,30 @@ class App extends Component<any, any> {
                       bgcolor: "background.paper",
                     }}
                   >
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <PhoneAndroidIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Phone"
-                        secondary="(323) 513-8779"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <AlternateEmailIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Email"
-                        secondary="business@JesseLawler.com"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <GitHubIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="GitHub"
-                        secondary="https://github.com/JesseLawler"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <LinkedInIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="LinkedIn"
-                        secondary="https://www.linkedin.com/in/jesselawler/"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <TwitterIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Twitter"
-                        secondary="https://twitter.com/Lawlerpalooza"
-                      />
-                    </ListItem>
+                    {CONTACT_LIST.map(
+                      (contact: MeansOfContact, index: number) => {
+                        return (
+                          <a
+                            onClick={() => {
+                              window.open(contact.url, "_blank");
+                            }}
+                          >
+                            <ListItem>
+                              <ListItemAvatar>
+                                <Avatar>{icon(contact.icon)}</Avatar>
+                              </ListItemAvatar>
+                              <ListItemText
+                                primary={contact.name}
+                                secondary={contact.value}
+                              />
+                            </ListItem>
+                            {index < CONTACT_LIST.length - 1 ? (
+                              <Divider />
+                            ) : null}
+                          </a>
+                        );
+                      }
+                    )}
                   </List>
                 </Item>
                 <h1 className="section-header">
@@ -658,6 +673,45 @@ class App extends Component<any, any> {
                         secondary="University of Oregon, 1997"
                       />
                     </ListItem>
+                    <Divider />
+                    <a
+                      onClick={() => {
+                        window.open(
+                          "https://www.spaghettimonster.org/",
+                          "_blank"
+                        );
+                      }}
+                    >
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
+                          </Avatar>
+                        </ListItemAvatar>
+
+                        <ListItemText
+                          primary="Ordained Minister"
+                          secondary="Church of the Flying Spaghetti Monster"
+                        />
+                      </ListItem>
+                    </a>
+                    <ListItem style={{ display: "none" }}>
+                      <a
+                        onClick={() => {
+                          window.open("https://birdsarentreal.com/", "_blank");
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar>
+                            <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
+                          </Avatar>
+                        </ListItemAvatar>
+                      </a>
+                      <ListItemText
+                        primary="Activist of the Year, 2021"
+                        secondary="Birds Aren't Real"
+                      />
+                    </ListItem>
                   </List>
                 </Item>
                 <h1 className="section-header">
@@ -714,18 +768,6 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         primary="Webification"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Valid QR code"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>

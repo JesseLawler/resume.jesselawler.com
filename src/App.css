@@ -123,6 +123,15 @@ body {
   margin-bottom: 5px;
 }
 
+a .MuiListItemText-root {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+a:hover .MuiListItem-root .MuiListItemText-secondary {
+  color: #ffffff; /* #fff4bb; */
+}
+
 .section-header {
   font-family: "Jura", Calibri, "Trebuchet MS", sans-serif;
   text-transform: uppercase;
