@@ -1,4 +1,5 @@
 import React from "react";
+import Tooltip from "@mui/material/Tooltip";
 
 const numWeeks = 52;
 
@@ -59,6 +60,18 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
     const today = new Date();
     const m = today.getMonth() + 1;
     return m === 12 ? 0 : m;
+  };
+
+  const dateOfCalendarDay = (week: number, dayOfWeekIndex: number) => {
+    const daysSinceCalendarStart = week * 7 + dayOfWeekIndex;
+    let tempDate = new Date();
+    const dt = new Date(
+      tempDate.setTime(
+        _firstCalendarDay.getTime() +
+          daysSinceCalendarStart * MICROSECONDS_IN_DAY
+      )
+    );
+    return dt;
   };
 
   // This function returns the day of the week
@@ -131,7 +144,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
           </tr>
         </thead>
         <tbody>
-          {DAYS_OF_WEEK.map((day) => (
+          {DAYS_OF_WEEK.map((day, dayIndex) => (
             <tr>
               {day === "Sun" ? (
                 <td></td>
@@ -165,14 +178,24 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
                 // enforce lower and upper bounds
                 if (adjustedRando < 0) adjustedRando = 0;
                 if (adjustedRando > maxCommits) adjustedRando = maxCommits;
-                // JESSEFIX SOON - drop to zero on days in the future
+                // don't show work on future days
+                const cellDate = dateOfCalendarDay(week, dayIndex);
+                if (cellDate > new Date()) return <td></td>;
                 return (
                   <td
                     style={{
                       padding: 1,
                     }}
                   >
-                    {dayMarker(Math.round(adjustedRando))}
+                    <Tooltip
+                      title={cellDate.toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    >
+                      {dayMarker(Math.round(adjustedRando))}
+                    </Tooltip>
                   </td>
                 );
               })}
@@ -181,10 +204,17 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={numWeeks + 1}>
-              <div style={{ float: "left" }}>
-                Learn how we count contributions
-              </div>
+            <td colSpan={numWeeks + 1} style={{ verticalAlign: "middle" }}>
+              <Tooltip
+                title={
+                  "This isn't real data. I just think it looks cool. Design inspired by GitHub."
+                }
+                placement="top"
+              >
+                <div style={{ float: "left", cursor: "pointer" }}>
+                  Learn how we count contributions
+                </div>
+              </Tooltip>
               <div id="legend">
                 <span style={{ marginRight: 4 }}>Less</span>
                 <span className="sample-day">{dayMarker(0)}</span>

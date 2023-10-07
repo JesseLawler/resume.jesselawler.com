@@ -63,6 +63,7 @@ import {
   faCoffee,
   faDatabase,
   faTerminal,
+  faUserGraduate,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faAws,
@@ -407,7 +408,7 @@ class App extends Component<any, any> {
         >
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} style={{ marginBottom: 36, zIndex: -1 }}>
+              <Grid item xs={12} style={{ marginBottom: 36 }}>
                 <FauxGithubHeader />
               </Grid>
               <Grid item xs={4} className="experience">
@@ -608,7 +609,7 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <ImageIcon />
+                          <FontAwesomeIcon icon={faUserGraduate} />
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
@@ -655,18 +656,6 @@ class App extends Component<any, any> {
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Beautified Header"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
                           <MapIcon />
                         </Avatar>
                       </ListItemAvatar>
@@ -696,18 +685,6 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         primary="Webification"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Day Popover on GitHub days"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
