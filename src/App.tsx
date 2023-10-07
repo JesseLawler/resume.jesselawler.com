@@ -79,6 +79,7 @@ import {
 import FauxGithubHeader from "./faux-github-header";
 import SimpleMap from "./SimpleMap";
 import { GpsCoords } from "./SimpleMap";
+import { SimpleDialog } from "./qr-code-dialog";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -88,9 +89,10 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-type StateProps = {
+type AppState = {
   autoPingsOn: boolean;
   expandedAccordionPanel: string;
+  isQRCodeDialogOpen: boolean;
 };
 
 const LIFT_OF_AVATAR = 98;
@@ -360,9 +362,10 @@ class App extends Component<any, any> {
     // JESSEFIX
     super(props);
 
-    const defaults: StateProps = {
+    const defaults: AppState = {
       autoPingsOn: false,
       expandedAccordionPanel: "",
+      isQRCodeDialogOpen: false,
     };
 
     this.state = defaults;
@@ -462,7 +465,16 @@ class App extends Component<any, any> {
                       marginTop: -LIFT_OF_AVATAR,
                     }}
                   />
-                  <img src="/images/qr-code.png" alt="QR code" id="qr-code" />
+                  <a
+                    href="#"
+                    onClick={() => this.setState({ isQRCodeDialogOpen: true })}
+                  >
+                    <img
+                      src="/images/qr-code.png"
+                      alt="QR code"
+                      id="qr-code-button"
+                    />
+                  </a>
                   <div className="name">Jesse Lawler</div>
                   <div className="role">Full Stack Developer</div>
                   <List
@@ -740,6 +752,11 @@ class App extends Component<any, any> {
             </Grid>
           </Box>
         </div>
+
+        <SimpleDialog
+          open={this.state.isQRCodeDialogOpen}
+          onClose={() => this.setState({ isQRCodeDialogOpen: false })}
+        />
 
         <h1>Front-End (React Client)</h1>
         <div className="form">
