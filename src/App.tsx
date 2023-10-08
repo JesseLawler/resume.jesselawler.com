@@ -100,6 +100,7 @@ type AppState = {
   autoPingsOn: boolean;
   expandedAccordionPanel: string;
   isQRCodeDialogOpen: boolean;
+  showAllPanels: boolean;
 };
 
 const LIFT_OF_AVATAR = 98;
@@ -456,6 +457,7 @@ class App extends Component<any, any> {
       autoPingsOn: false,
       expandedAccordionPanel: "",
       isQRCodeDialogOpen: false,
+      showAllPanels: false,
     };
 
     this.state = defaults;
@@ -818,6 +820,8 @@ class App extends Component<any, any> {
                     </Item>
                   ))}
                 </div>
+              </Grid>
+              <Grid item xs={4}>
                 <h1 className="section-header">
                   <CheckIcon className="icon" />
                   To-Do's
@@ -876,6 +880,19 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        className="incomplete"
+                        primary="Copyright"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
                         primary="AWS Serverless progress bars"
                         secondary="Jan 9, 2014"
                       />
@@ -883,10 +900,28 @@ class App extends Component<any, any> {
                   </List>
                 </Item>
               </Grid>
-              <Grid item xs={4}></Grid>
               <Grid item xs={4}>
                 <Item>
-                  <Switch defaultChecked />
+                  <FormGroup>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={this.state.showAllPanels}
+                          onChange={() => {
+                            console.log(
+                              "toggling the open state of all panels..."
+                            );
+                            this.setState({
+                              showAllPanels: !this.state.showAllPanels,
+                            });
+                          }}
+                          color={"default"}
+                        />
+                      }
+                      label="Toggle all panels open"
+                      style={{ marginLeft: "auto", marginRight: "auto" }}
+                    />
+                  </FormGroup>
                 </Item>
               </Grid>
               <Grid item xs={4}></Grid>

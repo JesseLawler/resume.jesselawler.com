@@ -67,6 +67,10 @@ a:hover .MuiListItem-root {
   color: #ffffff;
 }
 
+.MuiSwitch-switchBase {
+  color: #00ee00 !important;
+}
+
 a .main {
   text-decoration: none; /* This just won't seem to work. Not sure why. Using onClick instead of href to avoid the <a>-tag issue. */
 }
