@@ -241,9 +241,49 @@ const SKILLS: Skill[] = [
   },
   { name: "Node.js", level: 6, icon: "node-js", url: "https://nodejs.org/" },
   {
-    name: "AWS Serverless (SAM, CloudFormation, Cognito, etc.)",
+    name: "CloudFormation",
     icon: "aws",
-    url: "https://aws.amazon.com/what-is-aws/",
+    url: "https://aws.amazon.com/cloudformation/",
+  },
+  {
+    name: "SAM",
+    icon: "aws",
+    url: "https://aws.amazon.com/serverless/sam/",
+  },
+  {
+    name: "Lambda",
+    icon: "aws",
+    url: "https://aws.amazon.com/lambda/",
+  },
+  {
+    name: "Cognito",
+    icon: "aws",
+    url: "https://aws.amazon.com/cognito/",
+  },
+  {
+    name: "S3",
+    icon: "aws",
+    url: "https://aws.amazon.com/s3/",
+  },
+  {
+    name: "Route 53",
+    icon: "aws",
+    url: "https://aws.amazon.com/route53/",
+  },
+  {
+    name: "API Gateway",
+    icon: "aws",
+    url: "https://aws.amazon.com/api-gateway/",
+  },
+  {
+    name: "EC2",
+    icon: "aws",
+    url: "https://aws.amazon.com/ec2/",
+  },
+  {
+    name: "Step Functions",
+    icon: "aws",
+    url: "https://aws.amazon.com/step-functions/",
   },
   {
     name: "CI/CD (Bitbucket Pipelines)",
@@ -481,8 +521,8 @@ class App extends Component<any, any> {
                   <CheckCircleIcon className="icon" />
                   Experience
                 </h1>
-                {EXPERIENCES.map((e: Experience) => (
-                  <Item>
+                {EXPERIENCES.map((e: Experience, index: number) => (
+                  <Item key={`exp-${index}`}>
                     <div className="institution">{e.institution}</div>
                     <div className="role">{e.role}</div>
                     <div className="period">
@@ -538,6 +578,7 @@ class App extends Component<any, any> {
                       (contact: MeansOfContact, index: number) => {
                         return (
                           <a
+                            key={`contact-${index}`}
                             onClick={() => {
                               if (
                                 contact.url?.substring(0, 7) === "mailto:" ||
@@ -634,11 +675,12 @@ class App extends Component<any, any> {
                     let proportionCompleted =
                       (SKILLS.length - index) / SKILLS.length;
                     const floor = 0.2;
-                    const ceiling = 0.8;
+                    const ceiling = 1.0;
                     proportionCompleted *= ceiling - floor;
                     proportionCompleted += floor;
                     return (
                       <a
+                        key={`chip-${index}`}
                         href="#"
                         onClick={
                           skill.url === undefined
@@ -652,13 +694,10 @@ class App extends Component<any, any> {
                           variant={"outlined"}
                           style={{
                             backgroundColor:
-                              `rgba(80, 80, 80, ` +
+                              `rgba(27, 37, 41, ` +
                               proportionCompleted.toFixed(2) +
                               `)`,
-                            borderColor:
-                              `rgba(100, 100, 100, ` +
-                              proportionCompleted.toFixed(2) +
-                              `)`,
+                            borderColor: `rgba(127, 137, 141, ` + 0.2 + `)`,
                           }}
                         />
                       </a>
@@ -730,8 +769,8 @@ class App extends Component<any, any> {
                   Education
                 </h1>
                 <div className="experience education">
-                  {EDUCATION.map((e: Experience) => (
-                    <Item>
+                  {EDUCATION.map((e: Experience, index: number) => (
+                    <Item key={`edu-${index}`}>
                       <div className="institution">{e.institution}</div>
                       <div className="role">{e.role}</div>
                       <div className="period">
@@ -745,8 +784,6 @@ class App extends Component<any, any> {
                     </Item>
                   ))}
                 </div>
-              </Grid>
-              <Grid item xs={4}>
                 <h1 className="section-header">
                   <CheckIcon className="icon" />
                   To-Do's
@@ -766,6 +803,33 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        className="incomplete"
+                        primary="Experience Accordion"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        className="incomplete"
+                        primary="Text Clean-up"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        className="incomplete"
                         primary="Web Hosting"
                         secondary="Jan 9, 2014"
                       />
@@ -778,6 +842,7 @@ class App extends Component<any, any> {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
+                        className="incomplete"
                         primary="Webification"
                         secondary="Jan 9, 2014"
                       />
@@ -797,6 +862,7 @@ class App extends Component<any, any> {
                   </List>
                 </Item>
               </Grid>
+              <Grid item xs={4}></Grid>
               <Grid item xs={4}>
                 <Item>
                   <Switch defaultChecked />

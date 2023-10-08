@@ -123,7 +123,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
         <thead>
           <tr>
             <th></th>
-            {Array.from(Array(numWeeks).keys()).map((week) => {
+            {Array.from(Array(numWeeks).keys()).map((week, weekIndex) => {
               let tempDate = new Date();
               const sundayOfWeek = new Date(
                 tempDate.setTime(
@@ -132,6 +132,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
               );
               return (
                 <th
+                  key={`week-${weekIndex}`}
                   style={{
                     fontSize: 12,
                     maxWidth: 11, // overflow is just fine ;)
@@ -145,7 +146,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
         </thead>
         <tbody>
           {DAYS_OF_WEEK.map((day, dayIndex) => (
-            <tr>
+            <tr key={`row-${dayIndex}`}>
               {day === "Sun" ? (
                 <td></td>
               ) : displayDayName(day) ? (
@@ -180,22 +181,19 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
                 if (adjustedRando > maxCommits) adjustedRando = maxCommits;
                 // don't show work on future days
                 const cellDate = dateOfCalendarDay(week, dayIndex);
-                if (cellDate > new Date()) return <td></td>;
                 return (
-                  <td
-                    style={{
-                      padding: 1,
-                    }}
-                  >
-                    <Tooltip
-                      title={cellDate.toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    >
-                      {dayMarker(Math.round(adjustedRando))}
-                    </Tooltip>
+                  <td key={`w${week}-d${dayIndex}`}>
+                    {cellDate <= new Date() && (
+                      <Tooltip
+                        title={cellDate.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      >
+                        {dayMarker(Math.round(adjustedRando))}
+                      </Tooltip>
+                    )}
                   </td>
                 );
               })}

@@ -134,6 +134,10 @@ a .main {
   margin: 4px;
 }
 
+.incomplete .MuiListItemText-primary {
+  color: #ff35c9;
+}
+
 .MuiDialogContent-root img {
   width: 100%;
 }
@@ -226,6 +230,10 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 
 #awards .MuiListItem-root .icon svg {
   scale: 1.6;
+}
+
+#faux-github-header tbody td {
+  padding: 1px;
 }
 
 #faux-github-header thead th {
