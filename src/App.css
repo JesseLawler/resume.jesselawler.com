@@ -1,3 +1,9 @@
+/***** FUTURE TO-DO's - MAKE THIS DYNAMIC CSS *****
+
+Hover Color: #ffcc11
+
+**************************************************/
+
 body {
   background-color: #0f1217 !important;
 }
@@ -18,7 +24,7 @@ body {
   margin: 10px;
 }
 
-.chip-party > .MuiChip-root {
+.chip-party .MuiChip-root {
   /*font-family: "Gemunu Libre", sans-serif;*/
   font-size: 0.85em;
   margin: 0px 8px 8px 0px;
@@ -49,6 +55,20 @@ body {
 .form input {
   width: 250px;
   margin: 10px;
+}
+
+.MuiListItem-root {
+  border-bottom: 1px solid transparent;
+}
+
+a:hover .MuiListItem-root {
+  border-bottom: 1px solid #ffcc1177;
+  cursor: pointer;
+  color: #ffffff;
+}
+
+a .main {
+  text-decoration: none; /* This just won't seem to work. Not sure why. Using onClick instead of href to avoid the <a>-tag issue. */
 }
 
 .main .name {
@@ -140,7 +160,10 @@ body {
 
 a .MuiListItemText-root {
   text-decoration: none !important;
-  cursor: pointer;
+}
+
+a:hover .MuiChip-outlined {
+  border: 1px solid #ffcc1177 !important;
 }
 
 a:hover .MuiListItem-root .MuiListItemText-secondary {

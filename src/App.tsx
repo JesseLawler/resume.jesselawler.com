@@ -539,7 +539,13 @@ class App extends Component<any, any> {
                         return (
                           <a
                             onClick={() => {
-                              window.open(contact.url, "_blank");
+                              if (
+                                contact.url?.substring(0, 7) === "mailto:" ||
+                                contact.url?.substring(0, 6) === "phone:"
+                              )
+                                window.open(contact.url);
+                              // open in the same tab
+                              else window.open(contact.url, "_blank"); // open in new tab
                             }}
                           >
                             <ListItem>
@@ -623,28 +629,41 @@ class App extends Component<any, any> {
                       : a.priority === b.priority
                       ? 0
                       : -1;
-                  }).map((skill: Skill) => (
-                    <Chip
-                      label={skill.name}
-                      icon={icon(skill.icon)}
-                      variant={
-                        skill.priority === undefined ? "outlined" : "filled"
-                      }
-                      style={{
-                        backgroundColor:
+                  }).map((skill: Skill, index: number) => {
+                    // make a nice gradient of colors for the skills
+                    let proportionCompleted =
+                      (SKILLS.length - index) / SKILLS.length;
+                    const floor = 0.2;
+                    const ceiling = 0.8;
+                    proportionCompleted *= ceiling - floor;
+                    proportionCompleted += floor;
+                    return (
+                      <a
+                        href="#"
+                        onClick={
                           skill.url === undefined
-                            ? "red"
-                            : `rgba(80, 80, 80, ` +
-                              (skill.level ?? 3) / 10 +
+                            ? undefined
+                            : () => openInNewTab(skill.url!)
+                        }
+                      >
+                        <Chip
+                          label={skill.name}
+                          icon={icon(skill.icon)}
+                          variant={"outlined"}
+                          style={{
+                            backgroundColor:
+                              `rgba(80, 80, 80, ` +
+                              proportionCompleted.toFixed(2) +
                               `)`,
-                      }}
-                      onClick={
-                        skill.url === undefined
-                          ? undefined
-                          : () => openInNewTab(skill.url!)
-                      }
-                    />
-                  ))}
+                            borderColor:
+                              `rgba(100, 100, 100, ` +
+                              proportionCompleted.toFixed(2) +
+                              `)`,
+                          }}
+                        />
+                      </a>
+                    );
+                  })}
                 </div>
                 <h1 className="section-header">
                   <StarsIcon className="icon" />
