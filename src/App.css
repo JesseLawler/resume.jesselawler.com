@@ -92,15 +92,15 @@ a .main {
   color: #f7f7f7;
 }
 
-.experience > .MuiPaper-root {
-  background-color: transparent;
-  border: 4px solid #00001106;
-  padding: 11px 15px 15px 15px;
-  margin-bottom: 12px;
+.experience .MuiPaper-root {
+  background: transparent; /* #25282e; */
+  padding: 0px; /*padding: 11px 15px 15px 15px;*/
+  text-align: right;
 }
 
-.experience .MuiPaper-root {
-  text-align: right;
+.experience > .MuiPaper-root {
+  border: 8px solid #25282e;
+  margin-bottom: 12px;
 }
 
 /*
@@ -108,6 +108,10 @@ a .main {
   text-align: left;
 }
 */
+
+.experience .MuiAccordionSummary-content {
+  display: block;
+}
 
 .experience .institution {
   font-family: "Gemunu Libre", sans-serif;

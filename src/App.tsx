@@ -523,16 +523,29 @@ class App extends Component<any, any> {
                 </h1>
                 {EXPERIENCES.map((e: Experience, index: number) => (
                   <Item key={`exp-${index}`}>
-                    <div className="institution">{e.institution}</div>
-                    <div className="role">{e.role}</div>
-                    <div className="period">
-                      {`${getLongMonthName(
-                        new Date(e.start.year, e.start.month)
-                      )} ${e.start.year}  - ${getLongMonthName(
-                        new Date(e.end.year, e.end.month)
-                      )} ${e.end.year}`}
-                    </div>
-                    <div className="description">{e.description}</div>
+                    <Accordion
+                      expanded={this.state.expandedAccordionPanel === "panel1"} // JESSEFIX NOW
+                      onChange={this.handleAccordionChange("panel1")} // JESSEFIX NOW
+                    >
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        //aria-controls="panel1bh-content"
+                        //id="panel1bh-header"
+                      >
+                        <div className="institution">{e.institution}</div>
+                        <div className="role">{e.role}</div>
+                        <div className="period">
+                          {`${getLongMonthName(
+                            new Date(e.start.year, e.start.month)
+                          )} ${e.start.year}  - ${getLongMonthName(
+                            new Date(e.end.year, e.end.month)
+                          )} ${e.end.year}`}
+                        </div>
+                      </AccordionSummary>
+                      <AccordionDetails className="description">
+                        {e.description}
+                      </AccordionDetails>
+                    </Accordion>
                   </Item>
                 ))}
               </Grid>
