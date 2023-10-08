@@ -201,15 +201,15 @@ Full-stack coding (and team oversight) using primary tech stack: Objective-C, Am
     end: { year: 2016, month: 8 },
   },
   {
-    institution: "Smart Drug Smarts (podcast)",
-    role: "Host/Interviewer, Producer",
+    institution: "Smart Drug Smarts",
+    role: "Podcast Host + Producer",
     description: `I was a podcaster before it was cool.  5+ million downloads, reaching ~35,000 per week at my peak. 
 Did related programming, including an extremely customized Wordpress site (PHP, MySQL) plus a dedicated iOS app (Objective-C).`,
     start: { year: 2012, month: 11 },
     end: { year: 2018, month: 5 },
   },
   {
-    institution: "Antibody Films, Los Angeles, CA",
+    institution: "Antibody Films",
     role: "Film Producer",
     description: `Financed + Produced various “schlock” films, in genres ranging from kids comedy to fast-zombie horror.   
 Oversaw editing + visual effects (Final Cut Pro) and associated marketing on the teenage web (ASP.NET, Wordpress, etc.).`,
@@ -524,13 +524,17 @@ class App extends Component<any, any> {
                 {EXPERIENCES.map((e: Experience, index: number) => (
                   <Item key={`exp-${index}`}>
                     <Accordion
-                      expanded={this.state.expandedAccordionPanel === "panel1"} // JESSEFIX NOW
-                      onChange={this.handleAccordionChange("panel1")} // JESSEFIX NOW
+                      expanded={
+                        this.state.expandedAccordionPanel ===
+                        `experience-panel-${index}`
+                      }
+                      onChange={this.handleAccordionChange(
+                        "experience-panel-" + index.toString()
+                      )}
                     >
                       <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
-                        //aria-controls="panel1bh-content"
-                        //id="panel1bh-header"
+                        aria-controls={`experience-panel-${index}-content`}
                       >
                         <div className="institution">{e.institution}</div>
                         <div className="role">{e.role}</div>
@@ -784,16 +788,33 @@ class App extends Component<any, any> {
                 <div className="experience education">
                   {EDUCATION.map((e: Experience, index: number) => (
                     <Item key={`edu-${index}`}>
-                      <div className="institution">{e.institution}</div>
-                      <div className="role">{e.role}</div>
-                      <div className="period">
-                        {`${getLongMonthName(
-                          new Date(e.start.year, e.start.month)
-                        )} ${e.start.year}  - ${getLongMonthName(
-                          new Date(e.end.year, e.end.month)
-                        )} ${e.end.year}`}
-                      </div>
-                      <div className="description">{e.description}</div>
+                      <Accordion
+                        expanded={
+                          this.state.expandedAccordionPanel ===
+                          `education-panel-${index}`
+                        }
+                        onChange={this.handleAccordionChange(
+                          "education-panel-" + index.toString()
+                        )}
+                      >
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={`education-panel-${index}-content`}
+                        >
+                          <div className="institution">{e.institution}</div>
+                          <div className="role">{e.role}</div>
+                          <div className="period">
+                            {`${getLongMonthName(
+                              new Date(e.start.year, e.start.month)
+                            )} ${e.start.year}  - ${getLongMonthName(
+                              new Date(e.end.year, e.end.month)
+                            )} ${e.end.year}`}
+                          </div>
+                        </AccordionSummary>
+                        <AccordionDetails className="description">
+                          {e.description}
+                        </AccordionDetails>
+                      </Accordion>
                     </Item>
                   ))}
                 </div>
@@ -809,19 +830,6 @@ class App extends Component<any, any> {
                       bgcolor: "background.paper",
                     }}
                   >
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Experience Accordion"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>
@@ -881,6 +889,12 @@ class App extends Component<any, any> {
                   <Switch defaultChecked />
                 </Item>
               </Grid>
+              <Grid item xs={4}></Grid>
+              <Grid item xs={12}>
+                <Box sx={{ my: 2 }}>
+                  <Copyright />
+                </Box>
+              </Grid>
             </Grid>
           </Box>
         </div>
@@ -889,322 +903,6 @@ class App extends Component<any, any> {
           open={this.state.isQRCodeDialogOpen}
           onClose={() => this.setState({ isQRCodeDialogOpen: false })}
         />
-
-        <h1>Front-End (React Client)</h1>
-        <div className="form">
-          <input
-            name="setBookName"
-            placeholder="Enter Book Name"
-            onChange={this.handleChange}
-          />
-          <input
-            name="setReview"
-            placeholder="Enter Review"
-            onChange={this.handleChange}
-          />
-        </div>
-        <hr />
-
-        <Box
-          component="form"
-          sx={{
-            "& .MuiTextField-root": { m: 1, width: "25ch" },
-          }}
-          noValidate
-          autoComplete="off"
-          style={{
-            maxWidth: 700,
-            marginLeft: "auto",
-            marginRight: "auto",
-            textAlign: "left",
-          }}
-        >
-          <h2 style={{ textAlign: "center" }}>Traveling Device Bolus</h2>
-
-          <FormGroup>
-            <div style={{ display: "flex" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={this.state.autoPingsOn}
-                    onChange={() =>
-                      this.setState({
-                        autoPingsOn: !this.state.autoPingsOn,
-                      })
-                    }
-                    inputProps={{ "aria-label": "Automatically Send Pings" }}
-                    color="primary"
-                  />
-                }
-                label={
-                  "Automatically ping every " +
-                  Math.round(AUTO_PING_INTERVAL_MS / 1000) +
-                  " seconds"
-                }
-              />
-              <TextField
-                id="timestamp"
-                label="Timestamp"
-                variant="outlined"
-                name="timestamp"
-                type="readonly"
-                value={this.state.timestamp}
-              />
-            </div>
-          </FormGroup>
-
-          <FormGroup>
-            <div style={{ display: "flex" }}>
-              <TextField
-                id="trackerId"
-                label="Tracker ID"
-                variant="outlined"
-                name="trackerId"
-                type="readonly"
-                value={this.state.trackerId}
-              />
-              <TextField
-                id="connectionStrength"
-                label="Connection Strength"
-                variant="outlined"
-                name="connectionStrength"
-                type="number"
-                value={this.state.connectionStrength}
-              />
-            </div>
-          </FormGroup>
-
-          <FormGroup>
-            <div style={{ display: "flex" }}>
-              <TextField
-                id="batteryLevel"
-                label="Battery Level"
-                variant="outlined"
-                name="batteryLevel"
-                type="number"
-                value={this.state.batteryLevel}
-              />
-              <TextField
-                id="batteryMinRemaining"
-                label="Battery Minutes Remaining"
-                variant="outlined"
-                name="batteryMinRemaining"
-                type="number"
-                value={this.state.batteryMinRemaining}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={this.state.hasExternalPower}
-                    onChange={() =>
-                      this.setState({
-                        hasExternalPower: !this.state.hasExternalPower,
-                      })
-                    }
-                    inputProps={{ "aria-label": "External Power Supply" }}
-                    color="secondary"
-                  />
-                }
-                label="External Power Supply Connected"
-              />
-            </div>
-          </FormGroup>
-
-          <FormGroup>
-            <div style={{ display: "flex" }}>
-              <TextField
-                id="busId"
-                label="Bus ID"
-                variant="outlined"
-                name="busId"
-                type="readonly"
-                value={this.state.busId}
-              />
-              <TextField
-                id="routeId"
-                label="Route ID"
-                variant="outlined"
-                name="routeId"
-                type="readonly"
-                value={this.state.routeId}
-              />
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={this.state.busActive}
-                    onChange={() =>
-                      this.setState({ busActive: !this.state.busActive })
-                    }
-                    inputProps={{ "aria-label": "Bus is Active" }}
-                    color="secondary"
-                  />
-                }
-                label="Bus is Active"
-              />
-            </div>
-          </FormGroup>
-
-          <div style={{ textAlign: "center" }}>
-            <Button
-              className="my-2"
-              //color={"undefined"}
-              variant="contained"
-              onClick={this.randomizePing}
-              style={{ marginRight: 7 }}
-            >
-              Randomize Entries
-            </Button>
-          </div>
-        </Box>
-        <hr />
-        <div
-          style={{
-            width: 700,
-            textAlign: "left",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          <ul>
-            <b className="silly">Device</b>
-            <li>Push up legit JPG to server</li>
-          </ul>
-          <ul>
-            <b>User Map</b>
-            <li>Expected Arrival time (current location / any stop)</li>
-            <li>Bus routes</li>
-            <li>Current Bus Map</li>
-            <li>Anticipated Head-Count on bus</li>
-            <li>Nearest bus stop to location X</li>
-          </ul>
-
-          <div
-            style={{
-              backgroundColor: "rgba(67, 77, 91, 0.2)",
-              borderColor: "#303740",
-              borderRadius: 20,
-              padding: 20,
-              marginBottom: 35,
-            }}
-          >
-            <h2 style={{ marginTop: 0, marginBottom: 5 }}>Bus Schedule</h2>
-            <Accordion
-              expanded={this.state.expandedAccordionPanel === "panel1"}
-              onChange={this.handleAccordionChange("panel1")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1bh-content"
-                id="panel1bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  General settings
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  I am an accordion
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Nulla facilisi. Phasellus sollicitudin nulla et quam mattis
-                  feugiat. Aliquam eget maximus est, id dignissim quam.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={this.state.expandedAccordionPanel === "panel2"}
-              onChange={this.handleAccordionChange("panel2")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2bh-content"
-                id="panel2bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  Users
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  You are currently not an owner
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Donec placerat, lectus sed mattis semper, neque lectus feugiat
-                  lectus, varius pulvinar diam eros in elit. Pellentesque
-                  convallis laoreet laoreet.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={this.state.expandedAccordionPanel === "panel3"}
-              onChange={this.handleAccordionChange("panel3")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel3bh-content"
-                id="panel3bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  Advanced settings
-                </Typography>
-                <Typography sx={{ color: "text.secondary" }}>
-                  Filtering has been entirely disabled for whole web server
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Nunc vitae orci ultricies, auctor nunc in, volutpat nisl.
-                  Integer sit amet egestas eros, vitae egestas augue. Duis vel
-                  est augue.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-            <Accordion
-              expanded={this.state.expandedAccordionPanel === "panel4"}
-              onChange={this.handleAccordionChange("panel4")}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel4bh-content"
-                id="panel4bh-header"
-              >
-                <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                  Personal data
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Typography>
-                  Nunc vitae orci ultricies, auctor nunc in, volutpat nisl.
-                  Integer sit amet egestas eros, vitae egestas augue. Duis vel
-                  est augue.
-                </Typography>
-              </AccordionDetails>
-            </Accordion>
-          </div>
-
-          <ul>
-            <b>City</b>
-            <li>% on-time arrivals (within X minutes)</li>
-            <li>average variance in arrival time</li>
-            <li>average speed of travel</li>
-            <li>average number of riders by route/day/time</li>
-          </ul>
-          <ul>
-            <b>Admin</b>
-            <li>Are expected devices on/active</li>
-            <li>Device battery charge</li>
-            <li>Data abnormalities in last 24 hours / 72 hours / 2 weeks</li>
-          </ul>
-        </div>
-
-        <Container maxWidth="sm" style={{ marginBottom: 150 }}>
-          <Box sx={{ my: 4 }}>
-            <Typography variant="h4" component="h1" gutterBottom>
-              Material UI Create React App example in TypeScript
-            </Typography>
-            <Copyright />
-          </Box>
-        </Container>
       </div>
     );
   }

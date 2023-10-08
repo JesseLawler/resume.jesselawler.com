@@ -92,6 +92,22 @@ a .main {
   color: #f7f7f7;
 }
 
+.experience .MuiAccordionSummary-root {
+  padding-right: 4px;
+}
+
+.experience .MuiAccordionDetails-root {
+  padding-top: 0px;
+}
+
+.experience .MuiAccordionSummary-content.Mui-expanded {
+  margin: 12px 0px;
+}
+
+.experience .MuiAccordionSummary-expandIconWrapper {
+  margin-left: 6px;
+}
+
 .experience .MuiPaper-root {
   background: transparent; /* #25282e; */
   padding: 0px; /*padding: 11px 15px 15px 15px;*/
