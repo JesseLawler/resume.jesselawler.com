@@ -429,12 +429,8 @@ const icon = (iconName?: string) => {
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}.
+    <Typography variant="body2" align="center" id="copyright">
+      copyright © Jesse Lawler {new Date().getFullYear()}.
     </Typography>
   );
 }
@@ -527,8 +523,9 @@ class App extends Component<any, any> {
                   <Item key={`exp-${index}`}>
                     <Accordion
                       expanded={
+                        this.state.showAllPanels ||
                         this.state.expandedAccordionPanel ===
-                        `experience-panel-${index}`
+                          `experience-panel-${index}`
                       }
                       onChange={this.handleAccordionChange(
                         "experience-panel-" + index.toString()
@@ -792,8 +789,9 @@ class App extends Component<any, any> {
                     <Item key={`edu-${index}`}>
                       <Accordion
                         expanded={
+                          this.state.showAllPanels ||
                           this.state.expandedAccordionPanel ===
-                          `education-panel-${index}`
+                            `education-panel-${index}`
                         }
                         onChange={this.handleAccordionChange(
                           "education-panel-" + index.toString()
@@ -869,19 +867,6 @@ class App extends Component<any, any> {
                       <ListItemText
                         className="incomplete"
                         primary="Webification"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Copyright"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
