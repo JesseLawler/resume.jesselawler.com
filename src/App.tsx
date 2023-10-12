@@ -240,93 +240,150 @@ const SKILLS: Skill[] = [
     icon: "typescript",
     url: "https://www.typescriptlang.org/",
   },
-  { name: "Node.js", level: 6, icon: "node-js", url: "https://nodejs.org/" },
+
+  {
+    name: "Lambda",
+    icon: "aws",
+    url: "https://aws.amazon.com/lambda/",
+    priority: 3,
+  },
+
+  {
+    name: "Node.js",
+    level: 6,
+    icon: "node-js",
+    url: "https://nodejs.org/",
+    priority: 2,
+  },
   {
     name: "CloudFormation",
     icon: "aws",
     url: "https://aws.amazon.com/cloudformation/",
+    priority: 3,
   },
   {
     name: "SAM",
     icon: "aws",
     url: "https://aws.amazon.com/serverless/sam/",
+    priority: 3,
   },
   {
-    name: "Lambda",
+    name: "DynamoDB",
     icon: "aws",
-    url: "https://aws.amazon.com/lambda/",
+    url: "https://aws.amazon.com/dynamodb/",
+    priority: 5,
   },
   {
     name: "Cognito",
     icon: "aws",
     url: "https://aws.amazon.com/cognito/",
+    priority: 5,
   },
   {
     name: "S3",
     icon: "aws",
     url: "https://aws.amazon.com/s3/",
+    priority: 5,
   },
   {
     name: "Route 53",
     icon: "aws",
     url: "https://aws.amazon.com/route53/",
+    priority: 5,
   },
   {
     name: "API Gateway",
     icon: "aws",
     url: "https://aws.amazon.com/api-gateway/",
+    priority: 4,
   },
   {
     name: "EC2",
     icon: "aws",
     url: "https://aws.amazon.com/ec2/",
+    priority: 4,
   },
   {
     name: "Step Functions",
     icon: "aws",
     url: "https://aws.amazon.com/step-functions/",
+    priority: 4,
   },
   {
-    name: "CI/CD (Bitbucket Pipelines)",
-    icon: "bitbucket",
-    url: "https://bitbucket.org/product/features/pipelines",
+    name: "GitHub Actions",
+    icon: "github",
+    url: "https://github.com/features/actions",
+    priority: 2,
   },
-  { name: "Postman", icon: "postman", url: "https://www.postman.com/" },
-  { name: "SQL", icon: "database", url: "https://en.wikipedia.org/wiki/SQL" },
+  {
+    name: "Postman",
+    icon: "postman",
+    url: "https://www.postman.com/",
+    priority: 5,
+  },
+  {
+    name: "SQL",
+    icon: "database",
+    url: "https://en.wikipedia.org/wiki/SQL",
+    priority: 3,
+  },
+  {
+    name: "NoSQL",
+    icon: "database",
+    url: "https://en.wikipedia.org/wiki/NoSQL",
+    priority: 3,
+  },
   {
     name: "Objective-C",
-    priority: 2,
+    priority: 4,
     icon: "apple",
     url: "https://en.wikipedia.org/wiki/Objective-C",
   },
   {
     name: "Sails.js",
-    priority: 3,
     icon: "sails.js",
     url: "https://sailsjs.com/",
+    priority: 5,
   },
-  { name: "Bitcoin", icon: "bitcoin", url: "https://bitcoin.org/" },
-  { name: "Bash", icon: "terminal", url: "https://www.gnu.org/software/bash/" },
-  { name: "HTML", icon: "html", url: "https://en.wikipedia.org/wiki/HTML" },
+  {
+    name: "Bitcoin",
+    icon: "bitcoin",
+    url: "https://bitcoin.org/",
+    priority: 5,
+  },
+  {
+    name: "Bash",
+    icon: "terminal",
+    url: "https://www.gnu.org/software/bash/",
+    priority: 7,
+  },
+  {
+    name: "HTML",
+    icon: "html",
+    url: "https://en.wikipedia.org/wiki/HTML",
+    priority: 7,
+  },
   {
     name: "CSS",
-    priority: 2,
     icon: "css",
     url: "https://en.wikipedia.org/wiki/CSS",
+    priority: 6,
   },
-  { name: "SASS", priority: 2, icon: "sass", url: "https://sass-lang.com/" },
-  { name: "LESS", priority: 2, icon: "less", url: "https://lesscss.org/" },
+  { name: "SASS", icon: "sass", url: "https://sass-lang.com/", priority: 6 },
+  { name: "LESS", icon: "less", url: "https://lesscss.org/", priority: 6 },
   {
     name: "Google Cloud Platform",
     icon: "google",
     url: "https://cloud.google.com/",
+    priority: 4,
   },
   {
     name: "Firebase",
     icon: "firebase",
     url: "https://firebase.google.com/",
+    priority: 2,
   },
-  { name: "Yarn", icon: "yarn", url: "https://yarnpkg.com/" },
+  { name: "Yarn", icon: "yarn", url: "https://yarnpkg.com/", priority: 7 },
 ];
 // JESSEFIX and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
@@ -687,13 +744,11 @@ class App extends Component<any, any> {
                       ? 0
                       : -1;
                   }).map((skill: Skill, index: number) => {
-                    // make a nice gradient of colors for the skills
-                    let proportionCompleted =
-                      (SKILLS.length - index) / SKILLS.length;
-                    const floor = 0.2;
-                    const ceiling = 1.0;
-                    proportionCompleted *= ceiling - floor;
-                    proportionCompleted += floor;
+                    const bgColorPart1 = "rgba(43,50,58,"; // "rgba(27,37,41,";
+                    const priorityColor =
+                      bgColorPart1 +
+                      (1.1 - (skill.priority ?? 0) / 10).toFixed(1) +
+                      ")";
                     return (
                       <a
                         key={`chip-${index}`}
@@ -709,11 +764,8 @@ class App extends Component<any, any> {
                           icon={icon(skill.icon)}
                           variant={"outlined"}
                           style={{
-                            backgroundColor:
-                              `rgba(27, 37, 41, ` +
-                              proportionCompleted.toFixed(2) +
-                              `)`,
-                            borderColor: `rgba(127, 137, 141, ` + 0.2 + `)`,
+                            backgroundColor: priorityColor,
+                            borderColor: bgColorPart1 + "0.5)",
                           }}
                         />
                       </a>
@@ -867,18 +919,6 @@ class App extends Component<any, any> {
                       <ListItemText
                         className="incomplete"
                         primary="Webification"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="AWS Serverless progress bars"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
