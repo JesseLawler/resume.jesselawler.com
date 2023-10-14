@@ -1,0 +1,40 @@
+name: Production Build jesselawler.com/cv
+
+on:
+
+  push:
+    branches: [ master ]
+
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:      
+      matrix:        
+         node-version: [19.x]
+
+    steps:      
+      # Use the node version specified in the strategy    
+      - name: Use Node.js ${{ matrix.node-version }}      
+        uses: actions/setup-node@v1      
+        with:        
+          node-version: ${{ matrix.node-version }}
+
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      # Install packages
+      - name: Install packages
+        run: |
+          yarn install
+
+      # Build an optimized production build
+      - name: Production build      
+        run: |        
+          unset CI
+          yarn build
