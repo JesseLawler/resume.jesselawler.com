@@ -67,7 +67,7 @@ a:hover .MuiListItem-root {
 }
 
 a:hover .MuiListItem-root:not(:last-child) {
-  border-bottom: 1px solid #ffcc1177;
+  border-bottom: 1px solid #ffcc1176;
 }
 
 .MuiSwitch-switchBase {
