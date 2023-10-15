@@ -28,11 +28,14 @@ export type GpsBounds = {
   se: GpsCoords;
 };
 
+const DEFAULT_ORIGIN = "1600 Pennsylvania Ave NW, Washington, DC 20500"; // JESSEFIX NOW
+const DEFAULT_DESTINATION = "One World Trade Center, New York, NY 10007";
 const DEFAULT_HEIGHT = 200;
-const MILES_AWAY: number = 1234;
+const MILES_AWAY: number = 1234; // JESSEFIX NOW
 
 interface Props {
   bounds?: GpsBounds;
+  destination?: GpsCoords;
   center?: GpsCoords;
   height?: number;
   width?: number;
@@ -44,13 +47,33 @@ const formatInteger = (num: number) => {
 };
 
 export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
-  const { height = DEFAULT_HEIGHT, width = "100%" } = props;
+  const {
+    destination = DEFAULT_DESTINATION,
+    height = DEFAULT_HEIGHT,
+    width = "100%",
+  } = props;
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries: GOOGLE_MAPS_API_LIBRARIES,
   });
+
+  const originRef = useRef<HTMLInputElement | null>(null);
+  const destinationRef = useRef<HTMLInputElement | null>(null);
+
+  const [directionsFormValue, setDirectionsFormValue] = useState({
+    origin: DEFAULT_ORIGIN,
+    destination: destination,
+  });
+
+  const [map, setMap] = React.useState(null);
+
+  /*
+  const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
+    null
+  );
+  */
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -62,6 +85,15 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       userDecisionTimeout: undefined,
       watchLocationPermissionChange: true,
     });
+
+  /*
+  const directionsResult = useMemo(() => {
+    console.log("response: ", response);
+    return {
+      directions: response,
+    };
+  }, [response]);
+  */
 
   const mapOutput: ReactElement = !isGeolocationAvailable ? (
     <div>Your browser does not support Geolocation</div>
@@ -85,25 +117,9 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   /*
-
   const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     console.log("onClick args: ", e);
   }, []);
-
-
-
-  const userGPSCoordinates: GpsCoords | null = coords
-    ? { lat: coords?.latitude, lng: coords?.longitude }
-    : null; // JESSEFIX NOW
-
-
-
-  const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
-    null
-  );
-
-  const originRef = useRef<HTMLInputElement | null>(null);
-  const destinationRef = useRef<HTMLInputElement | null>(null);
 
   const directionsCallback = useCallback(
     (
@@ -121,63 +137,17 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     []
   );
 
-  const checkDriving = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
-    ({ target: { checked } }) => {
-      checked &&
-        setDirectionsFormValue((currentValue) => ({
-          ...currentValue,
-          travelMode: google.maps.TravelMode.DRIVING,
-        }));
-    },
-    []
-  );
-
-  const checkBicycling = useCallback<
-    React.ChangeEventHandler<HTMLInputElement>
-  >(({ target: { checked } }) => {
-    checked &&
-      setDirectionsFormValue((currentValue) => ({
-        ...currentValue,
-        travelMode: google.maps.TravelMode.BICYCLING,
-      }));
-  }, []);
-
-  const checkTransit = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
-    ({ target: { checked } }) => {
-      checked &&
-        setDirectionsFormValue((currentValue) => ({
-          ...currentValue,
-          travelMode: google.maps.TravelMode.TRANSIT,
-        }));
-    },
-    []
-  );
-
-  const checkWalking = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
-    ({ target: { checked } }) => {
-      checked &&
-        setDirectionsFormValue((currentValue) => ({
-          ...currentValue,
-          travelMode: google.maps.TravelMode.WALKING,
-        }));
-    },
-    []
-  );
-
-  const directionsResult = useMemo(() => {
-    console.log("response: ", response);
-    return {
-      directions: response,
-    };
-  }, [response]);
-
-
-
-  const [directionsFormValue, setDirectionsFormValue] = useState({
-    origin: "",
-    destination: "",
-    travelMode: google.maps.TravelMode.DRIVING,
-  });
+  const directionsServiceOptions =
+    useMemo<google.maps.DirectionsRequest>(() => {
+      return {
+        destination: directionsFormValue.destination,
+        origin: directionsFormValue.origin,
+        travelMode: google.maps.TravelMode.DRIVING,
+      };
+    }, [
+      directionsFormValue.origin,
+      directionsFormValue.destination,
+    ]);
 
   const onClick = useCallback<
     React.MouseEventHandler<HTMLButtonElement>
@@ -188,7 +158,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       destinationRef.current &&
       destinationRef.current.value !== ""
     ) {
-      console.log(`looking up directions...`);
+      console.log(`looking up directions...`); // JESSEFIX NOW
       setDirectionsFormValue((currentValue) => ({
         ...currentValue,
         origin: originRef.current?.value ?? "",
@@ -196,23 +166,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       }));
     }
   }, [originRef.current?.value, destinationRef.current?.value]);
-
-  const directionsServiceOptions =
-    useMemo<google.maps.DirectionsRequest>(() => {
-      return {
-        destination: directionsFormValue.destination,
-        origin: directionsFormValue.origin,
-        travelMode: directionsFormValue.travelMode,
-      };
-    }, [
-      directionsFormValue.origin,
-      directionsFormValue.destination,
-      directionsFormValue.travelMode,
-    ]);
-*/
-
-  const [map, setMap] = React.useState(null);
-
+  */
   const onMapLoad = React.useCallback(function callback(map: any) {
     let bounds: google.maps.LatLngBounds | undefined = undefined;
 
@@ -240,6 +194,12 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     setMap(null);
   }, []);
 
+  /*
+  const userGPSCoordinates: GpsCoords | null = coords
+    ? { lat: coords?.latitude, lng: coords?.longitude }
+    : null; // JESSEFIX NOW
+  */
+
   if (!isLoaded) return <></>;
 
   return (
@@ -259,8 +219,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       }}
     >
       <div className="map-settings">
-        <hr className="mt-0 mb-3" />
-
         <div className="row">
           <div className="col-md-6 col-lg-4">
             <div className="form-group">
@@ -270,8 +228,8 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
                 id="ORIGIN"
                 className="form-control"
                 type="text"
-                // JESSEFIX NOW ref={originRef}
-                value={"504 NW 6th Street, Corvallis, OR 97330"}
+                ref={originRef}
+                value={directionsFormValue.origin ?? ""}
               />
             </div>
           </div>
@@ -284,76 +242,10 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
                 id="DESTINATION"
                 className="form-control"
                 type="text"
-                // JESSEFIX NOW ref={destinationRef}
-                value={"2810 NW Johnson Avenue, Corvallis, OR 97330"}
+                ref={destinationRef}
+                value={JSON.stringify(directionsFormValue.destination) ?? ""}
               />
             </div>
-          </div>
-        </div>
-
-        <div className="d-flex flex-wrap">
-          <div className="form-group custom-control custom-radio mr-4">
-            <input
-              id="DRIVING"
-              className="custom-control-input"
-              name="travelMode"
-              type="radio"
-              checked={
-                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.DRIVING
-              }
-              //onChange={checkDriving}
-            />
-            <label className="custom-control-label" htmlFor="DRIVING">
-              Driving
-            </label>
-          </div>
-
-          <div className="form-group custom-control custom-radio mr-4">
-            <input
-              id="BICYCLING"
-              className="custom-control-input"
-              name="travelMode"
-              type="radio"
-              checked={
-                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.BICYCLING
-              }
-              //onChange={checkBicycling}
-            />
-            <label className="custom-control-label" htmlFor="BICYCLING">
-              Bicycling
-            </label>
-          </div>
-
-          <div className="form-group custom-control custom-radio mr-4">
-            <input
-              id="TRANSIT"
-              className="custom-control-input"
-              name="travelMode"
-              type="radio"
-              checked={
-                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.TRANSIT
-              }
-              //onChange={checkTransit}
-            />
-            <label className="custom-control-label" htmlFor="TRANSIT">
-              Transit
-            </label>
-          </div>
-
-          <div className="form-group custom-control custom-radio mr-4">
-            <input
-              id="WALKING"
-              className="custom-control-input"
-              name="travelMode"
-              type="radio"
-              checked={
-                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.WALKING
-              }
-              //onChange={checkWalking}
-            />
-            <label className="custom-control-label" htmlFor="WALKING">
-              Walking
-            </label>
           </div>
         </div>
 
@@ -365,7 +257,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           Build Route
         </button>
       </div>
-
       <ListItem>{mapOutput}</ListItem>
       <ListItem>
         <div className="icon">
@@ -388,17 +279,18 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           }}
           zoom={6}
         >
-          {/*directionsFormValue.destination !== "" &&
+          {/*
+          {directionsFormValue.destination !== "" &&
             directionsFormValue.origin !== "" && (
               <DirectionsService
                 options={directionsServiceOptions}
                 callback={directionsCallback}
               />
-            )*/}
-          {/*directionsResult.directions && (
+            )}
+          {directionsResult.directions && (
             <DirectionsRenderer options={directionsResult} />
-          )*/}
-          =
+          )}
+          */}
         </GoogleMap>
       </div>
     </List>

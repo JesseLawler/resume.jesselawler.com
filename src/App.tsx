@@ -636,6 +636,7 @@ class App extends Component<any, any> {
                       nw: CORVALLIS_CHIPOTLE,
                       se: CORVALLIS_DUTCH_BROS,
                     }}
+                    destination={CORVALLIS_CHIPOTLE}
                     height={90}
                     //width={"100%"}
                     style={
