@@ -487,7 +487,7 @@ const icon = (iconName?: string) => {
 function Copyright() {
   return (
     <Typography variant="body2" align="center" id="copyright">
-      copyright © Jesse Lawler {new Date().getFullYear()}.
+      copyright © Jesse Lawler {new Date().getFullYear()}
     </Typography>
   );
 }
@@ -578,34 +578,43 @@ class App extends Component<any, any> {
                 </h1>
                 {EXPERIENCES.map((e: Experience, index: number) => (
                   <Item key={`exp-${index}`}>
-                    <Accordion
-                      expanded={
-                        this.state.showAllPanels ||
-                        this.state.expandedAccordionPanel ===
-                          `experience-panel-${index}`
+                    <div
+                      onMouseOver={() =>
+                        this.setState({
+                          expandedAccordionPanel:
+                            "experience-panel-" + index.toString(),
+                        })
                       }
-                      onChange={this.handleAccordionChange(
-                        "experience-panel-" + index.toString()
-                      )}
                     >
-                      <AccordionSummary
-                        expandIcon={<ExpandMoreIcon />}
-                        aria-controls={`experience-panel-${index}-content`}
+                      <Accordion
+                        expanded={
+                          this.state.showAllPanels ||
+                          this.state.expandedAccordionPanel ===
+                            `experience-panel-${index}`
+                        }
+                        onChange={this.handleAccordionChange(
+                          "experience-panel-" + index.toString()
+                        )}
                       >
-                        <div className="institution">{e.institution}</div>
-                        <div className="role">{e.role}</div>
-                        <div className="period">
-                          {`${getLongMonthName(
-                            new Date(e.start.year, e.start.month)
-                          )} ${e.start.year}  - ${getLongMonthName(
-                            new Date(e.end.year, e.end.month)
-                          )} ${e.end.year}`}
-                        </div>
-                      </AccordionSummary>
-                      <AccordionDetails className="description">
-                        {e.description}
-                      </AccordionDetails>
-                    </Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={`experience-panel-${index}-content`}
+                        >
+                          <div className="institution">{e.institution}</div>
+                          <div className="role">{e.role}</div>
+                          <div className="period">
+                            {`${getLongMonthName(
+                              new Date(e.start.year, e.start.month)
+                            )} ${e.start.year}  - ${getLongMonthName(
+                              new Date(e.end.year, e.end.month)
+                            )} ${e.end.year}`}
+                          </div>
+                        </AccordionSummary>
+                        <AccordionDetails className="description">
+                          {e.description}
+                        </AccordionDetails>
+                      </Accordion>
+                    </div>
                   </Item>
                 ))}
               </Grid>
@@ -839,37 +848,49 @@ class App extends Component<any, any> {
                 <div className="experience education">
                   {EDUCATION.map((e: Experience, index: number) => (
                     <Item key={`edu-${index}`}>
-                      <Accordion
-                        expanded={
-                          this.state.showAllPanels ||
-                          this.state.expandedAccordionPanel ===
-                            `education-panel-${index}`
+                      <div
+                        onMouseOver={() =>
+                          this.setState({
+                            expandedAccordionPanel:
+                              "education-panel-" + index.toString(),
+                          })
                         }
-                        onChange={this.handleAccordionChange(
-                          "education-panel-" + index.toString()
-                        )}
                       >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={`education-panel-${index}-content`}
+                        <Accordion
+                          expanded={
+                            this.state.showAllPanels ||
+                            this.state.expandedAccordionPanel ===
+                              `education-panel-${index}`
+                          }
+                          onChange={this.handleAccordionChange(
+                            "education-panel-" + index.toString()
+                          )}
                         >
-                          <div className="institution">{e.institution}</div>
-                          <div className="role">{e.role}</div>
-                          <div className="period">
-                            {`${getLongMonthName(
-                              new Date(e.start.year, e.start.month)
-                            )} ${e.start.year}  - ${getLongMonthName(
-                              new Date(e.end.year, e.end.month)
-                            )} ${e.end.year}`}
-                          </div>
-                        </AccordionSummary>
-                        <AccordionDetails className="description">
-                          {e.description}
-                        </AccordionDetails>
-                      </Accordion>
+                          <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls={`education-panel-${index}-content`}
+                          >
+                            <div className="institution">{e.institution}</div>
+                            <div className="role">{e.role}</div>
+                            <div className="period">
+                              {`${getLongMonthName(
+                                new Date(e.start.year, e.start.month)
+                              )} ${e.start.year}  - ${getLongMonthName(
+                                new Date(e.end.year, e.end.month)
+                              )} ${e.end.year}`}
+                            </div>
+                          </AccordionSummary>
+                          <AccordionDetails className="description">
+                            {e.description}
+                          </AccordionDetails>
+                        </Accordion>
+                      </div>
                     </Item>
                   ))}
                 </div>
+              </Grid>
+              <Grid item xs={12}>
+                <hr />
               </Grid>
               <Grid item xs={4}>
                 <h1 className="section-header">
@@ -905,20 +926,7 @@ class App extends Component<any, any> {
                       </ListItemAvatar>
                       <ListItemText
                         className="incomplete"
-                        primary="Web Hosting"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Webification"
+                        primary="Finish the Map"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
