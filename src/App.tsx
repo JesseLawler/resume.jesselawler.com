@@ -60,7 +60,7 @@ import {
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
 import FauxGithubHeader from "./faux-github-header";
-import MiniMap from "./mini-map";
+import { GpsCoords, MiniMap } from "./mini-map";
 import { SimpleDialog } from "./qr-code-dialog";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -126,6 +126,16 @@ const CONTACT_LIST: MeansOfContact[] = [
     url: "https://twitter.com/Lawlerpalooza",
   },
 ];
+
+const CORVALLIS_CHIPOTLE: GpsCoords = {
+  lat: 44.56939681150158,
+  lng: -123.27912127517598,
+}; // Chipotle Mexican Grill
+
+const CORVALLIS_DUTCH_BROS: GpsCoords = {
+  lat: 44.5680629888922,
+  lng: -123.26066771576237,
+}; // Dutch Bros Coffee
 
 const EDUCATION: Experience[] = [
   {
@@ -620,7 +630,21 @@ class App extends Component<any, any> {
                   Location
                 </h1>
                 <Item>
-                  <MiniMap />
+                  <MiniMap
+                    //center={CORVALLIS_CHIPOTLE}
+                    bounds={{
+                      nw: CORVALLIS_CHIPOTLE,
+                      se: CORVALLIS_DUTCH_BROS,
+                    }}
+                    height={90}
+                    //width={"100%"}
+                    style={
+                      {
+                        //marginLeft: "auto",
+                        //marginRight: "auto",
+                      }
+                    }
+                  />
                 </Item>
                 <h1 className="section-header">
                   <FavoriteBorderIcon className="icon" style={{ width: 32 }} />

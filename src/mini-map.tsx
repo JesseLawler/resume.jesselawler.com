@@ -1,32 +1,57 @@
-import React, { ReactElement } from "react";
-import { useGeolocated } from "react-geolocated";
+import React, {
+  ReactElement,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { List, ListItem, ListItemText } from "@mui/material";
-import SimpleMap, { GpsCoords } from "./SimpleMap";
+import {
+  DirectionsRenderer,
+  DirectionsService,
+  GoogleMap,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import { useGeolocated } from "react-geolocated";
+import { GOOGLE_MAPS_API_KEY, GOOGLE_MAPS_API_LIBRARIES } from "./config";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
-const CORVALLIS_CHIPOTLE: GpsCoords = {
-  lat: 44.56939681150158,
-  lng: -123.27912127517598,
-}; // Chipotle Mexican Grill
+export type GpsCoords = {
+  lat: number;
+  lng: number;
+  ele?: number;
+};
 
-const CORVALLIS_DUTCH_BROS: GpsCoords = {
-  lat: 44.5680629888922,
-  lng: -123.26066771576237,
-}; // Dutch Bros Coffee
+export type GpsBounds = {
+  nw: GpsCoords;
+  se: GpsCoords;
+};
 
+const DEFAULT_HEIGHT = 200;
 const MILES_AWAY: number = 1234;
 
-type MiniMapProps = {
-  //
-};
+interface Props {
+  bounds?: GpsBounds;
+  center?: GpsCoords;
+  height?: number;
+  width?: number;
+  style?: React.CSSProperties;
+}
 
 const formatInteger = (num: number) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
-export const MiniMap: React.FC<MiniMapProps> = (
-  props: MiniMapProps
-): JSX.Element => {
+export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
+  const { height = DEFAULT_HEIGHT, width = "100%" } = props;
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    libraries: GOOGLE_MAPS_API_LIBRARIES,
+  });
+
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
       isOptimisticGeolocationEnabled: true,
@@ -37,10 +62,6 @@ export const MiniMap: React.FC<MiniMapProps> = (
       userDecisionTimeout: undefined,
       watchLocationPermissionChange: true,
     });
-
-  const userGPSCoordinates: GpsCoords | null = coords
-    ? { lat: coords?.latitude, lng: coords?.longitude }
-    : null; // JESSEFIX NOW
 
   const mapOutput: ReactElement = !isGeolocationAvailable ? (
     <div>Your browser does not support Geolocation</div>
@@ -63,6 +84,164 @@ export const MiniMap: React.FC<MiniMapProps> = (
     <div>Getting the location data&hellip; </div>
   );
 
+  /*
+
+  const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
+    console.log("onClick args: ", e);
+  }, []);
+
+
+
+  const userGPSCoordinates: GpsCoords | null = coords
+    ? { lat: coords?.latitude, lng: coords?.longitude }
+    : null; // JESSEFIX NOW
+
+
+
+  const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
+    null
+  );
+
+  const originRef = useRef<HTMLInputElement | null>(null);
+  const destinationRef = useRef<HTMLInputElement | null>(null);
+
+  const directionsCallback = useCallback(
+    (
+      result: google.maps.DirectionsResult | null,
+      status: google.maps.DirectionsStatus
+    ) => {
+      if (result !== null) {
+        if (status === "OK") {
+          setResponse(result);
+        } else {
+          console.log("response: ", result);
+        }
+      }
+    },
+    []
+  );
+
+  const checkDriving = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    ({ target: { checked } }) => {
+      checked &&
+        setDirectionsFormValue((currentValue) => ({
+          ...currentValue,
+          travelMode: google.maps.TravelMode.DRIVING,
+        }));
+    },
+    []
+  );
+
+  const checkBicycling = useCallback<
+    React.ChangeEventHandler<HTMLInputElement>
+  >(({ target: { checked } }) => {
+    checked &&
+      setDirectionsFormValue((currentValue) => ({
+        ...currentValue,
+        travelMode: google.maps.TravelMode.BICYCLING,
+      }));
+  }, []);
+
+  const checkTransit = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    ({ target: { checked } }) => {
+      checked &&
+        setDirectionsFormValue((currentValue) => ({
+          ...currentValue,
+          travelMode: google.maps.TravelMode.TRANSIT,
+        }));
+    },
+    []
+  );
+
+  const checkWalking = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    ({ target: { checked } }) => {
+      checked &&
+        setDirectionsFormValue((currentValue) => ({
+          ...currentValue,
+          travelMode: google.maps.TravelMode.WALKING,
+        }));
+    },
+    []
+  );
+
+  const directionsResult = useMemo(() => {
+    console.log("response: ", response);
+    return {
+      directions: response,
+    };
+  }, [response]);
+
+
+
+  const [directionsFormValue, setDirectionsFormValue] = useState({
+    origin: "",
+    destination: "",
+    travelMode: google.maps.TravelMode.DRIVING,
+  });
+
+  const onClick = useCallback<
+    React.MouseEventHandler<HTMLButtonElement>
+  >(() => {
+    if (
+      originRef.current &&
+      originRef.current.value !== "" &&
+      destinationRef.current &&
+      destinationRef.current.value !== ""
+    ) {
+      console.log(`looking up directions...`);
+      setDirectionsFormValue((currentValue) => ({
+        ...currentValue,
+        origin: originRef.current?.value ?? "",
+        destination: destinationRef.current?.value ?? "",
+      }));
+    }
+  }, [originRef.current?.value, destinationRef.current?.value]);
+
+  const directionsServiceOptions =
+    useMemo<google.maps.DirectionsRequest>(() => {
+      return {
+        destination: directionsFormValue.destination,
+        origin: directionsFormValue.origin,
+        travelMode: directionsFormValue.travelMode,
+      };
+    }, [
+      directionsFormValue.origin,
+      directionsFormValue.destination,
+      directionsFormValue.travelMode,
+    ]);
+*/
+
+  const [map, setMap] = React.useState(null);
+
+  const onMapLoad = React.useCallback(function callback(map: any) {
+    let bounds: google.maps.LatLngBounds | undefined = undefined;
+
+    if (props.bounds) {
+      bounds = new window.google.maps.LatLngBounds(
+        props.bounds.nw,
+        props.bounds.se
+      );
+      map.fitBounds(bounds);
+      setMap(map);
+      return;
+    }
+
+    if (props.center) {
+      bounds = new window.google.maps.LatLngBounds(props.center);
+      map.fitBounds(bounds);
+      setMap(map);
+      return;
+    }
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = React.useCallback(function callback(map: any) {
+    setMap(null);
+  }, []);
+
+  if (!isLoaded) return <></>;
+
   return (
     <List
       sx={{
@@ -79,6 +258,114 @@ export const MiniMap: React.FC<MiniMapProps> = (
         overflow: "hidden",
       }}
     >
+      <div className="map-settings">
+        <hr className="mt-0 mb-3" />
+
+        <div className="row">
+          <div className="col-md-6 col-lg-4">
+            <div className="form-group">
+              <label htmlFor="ORIGIN">Origin</label>
+              <br />
+              <input
+                id="ORIGIN"
+                className="form-control"
+                type="text"
+                // JESSEFIX NOW ref={originRef}
+                value={"504 NW 6th Street, Corvallis, OR 97330"}
+              />
+            </div>
+          </div>
+
+          <div className="col-md-6 col-lg-4">
+            <div className="form-group">
+              <label htmlFor="DESTINATION">Destination</label>
+              <br />
+              <input
+                id="DESTINATION"
+                className="form-control"
+                type="text"
+                // JESSEFIX NOW ref={destinationRef}
+                value={"2810 NW Johnson Avenue, Corvallis, OR 97330"}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="d-flex flex-wrap">
+          <div className="form-group custom-control custom-radio mr-4">
+            <input
+              id="DRIVING"
+              className="custom-control-input"
+              name="travelMode"
+              type="radio"
+              checked={
+                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.DRIVING
+              }
+              //onChange={checkDriving}
+            />
+            <label className="custom-control-label" htmlFor="DRIVING">
+              Driving
+            </label>
+          </div>
+
+          <div className="form-group custom-control custom-radio mr-4">
+            <input
+              id="BICYCLING"
+              className="custom-control-input"
+              name="travelMode"
+              type="radio"
+              checked={
+                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.BICYCLING
+              }
+              //onChange={checkBicycling}
+            />
+            <label className="custom-control-label" htmlFor="BICYCLING">
+              Bicycling
+            </label>
+          </div>
+
+          <div className="form-group custom-control custom-radio mr-4">
+            <input
+              id="TRANSIT"
+              className="custom-control-input"
+              name="travelMode"
+              type="radio"
+              checked={
+                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.TRANSIT
+              }
+              //onChange={checkTransit}
+            />
+            <label className="custom-control-label" htmlFor="TRANSIT">
+              Transit
+            </label>
+          </div>
+
+          <div className="form-group custom-control custom-radio mr-4">
+            <input
+              id="WALKING"
+              className="custom-control-input"
+              name="travelMode"
+              type="radio"
+              checked={
+                false // JESSEFIX NOW directionsFormValue.travelMode === google.maps.TravelMode.WALKING
+              }
+              //onChange={checkWalking}
+            />
+            <label className="custom-control-label" htmlFor="WALKING">
+              Walking
+            </label>
+          </div>
+        </div>
+
+        <button
+          className="btn btn-primary"
+          type="button"
+          // JESSEFIX NOW onClick={onClick}
+        >
+          Build Route
+        </button>
+      </div>
+
       <ListItem>{mapOutput}</ListItem>
       <ListItem>
         <div className="icon">
@@ -89,22 +376,31 @@ export const MiniMap: React.FC<MiniMapProps> = (
           secondary={`${formatInteger(MILES_AWAY)} miles away`}
         />
       </ListItem>
-      <a href="#">How far is Corvallis from me?</a>
-      <SimpleMap
-        //center={CORVALLIS_CHIPOTLE} // JESSEFIX merge SimpleMap into this component
-        bounds={{
-          nw: CORVALLIS_CHIPOTLE,
-          se: CORVALLIS_DUTCH_BROS,
-        }}
-        height={90}
-        //width={"100%"}
-        style={
-          {
-            //marginLeft: "auto",
-            //marginRight: "auto",
-          }
-        }
-      />
+      <div className="map-container">
+        <GoogleMap
+          center={props.center ? props.center : undefined} // Note to self: Don't give a center or user can't drag-control the map. Annoying.
+          mapContainerStyle={{ width: width, height: height, ...props.style }}
+          // JESSEFIX NOW onClick={onMapClick}
+          onLoad={onMapLoad}
+          onUnmount={onUnmount}
+          options={{
+            streetViewControl: false,
+          }}
+          zoom={6}
+        >
+          {/*directionsFormValue.destination !== "" &&
+            directionsFormValue.origin !== "" && (
+              <DirectionsService
+                options={directionsServiceOptions}
+                callback={directionsCallback}
+              />
+            )*/}
+          {/*directionsResult.directions && (
+            <DirectionsRenderer options={directionsResult} />
+          )*/}
+          =
+        </GoogleMap>
+      </div>
     </List>
   );
 };
