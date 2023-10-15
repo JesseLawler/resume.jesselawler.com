@@ -9,27 +9,17 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
-import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
-import FormLabel from "@mui/material/FormLabel";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Card, Row } from "react-bootstrap";
 import "./App.css";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -37,12 +27,9 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import CodeIcon from "@mui/icons-material/Code";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ImageIcon from "@mui/icons-material/Image";
-import WorkIcon from "@mui/icons-material/Work";
-import TableRowsIcon from "@mui/icons-material/TableRows";
 import SchoolIcon from "@mui/icons-material/School";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import DirectionsBikeIcon from "@mui/icons-material/DirectionsBike";
 import GoogleIcon from "@mui/icons-material/Google";
 import FaceIcon from "@mui/icons-material/Face";
 import HtmlIcon from "@mui/icons-material/Html";
@@ -50,20 +37,9 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import AppleIcon from "@mui/icons-material/Apple";
 import StarsIcon from "@mui/icons-material/Stars";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import MyLocationIcon from "@mui/icons-material/MyLocation";
 import CssIcon from "@mui/icons-material/Css";
-import MapIcon from "@mui/icons-material/Map";
-import PsychologyAltIcon from "@mui/icons-material/PsychologyAlt";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
-import {
-  Experience,
-  LOW_PRIORITY,
-  MeansOfContact,
-  Month,
-  Skill,
-} from "./interfaces";
+import { Experience, LOW_PRIORITY, MeansOfContact, Skill } from "./interfaces";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoffee,
@@ -84,8 +60,7 @@ import {
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
 import FauxGithubHeader from "./faux-github-header";
-import SimpleMap from "./SimpleMap";
-import { GpsCoords } from "./SimpleMap";
+import MiniMap from "./mini-map";
 import { SimpleDialog } from "./qr-code-dialog";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -104,9 +79,6 @@ type AppState = {
 };
 
 const LIFT_OF_AVATAR = 98;
-const AUTO_PING_INTERVAL_MS = 5000; // 5 seconds
-const COLOR_HIGHLIGHT = "#FFD700";
-const MILES_AWAY: number = 1234;
 const monthNames = [
   "January",
   "February",
@@ -121,16 +93,6 @@ const monthNames = [
   "November",
   "December",
 ];
-
-const CORVALLIS_CHIPOTLE: GpsCoords = {
-  lat: 44.56939681150158,
-  lng: -123.27912127517598,
-}; // Chipotle Mexican Grill
-
-const CORVALLIS_DUTCH_BROS: GpsCoords = {
-  lat: 44.5680629888922,
-  lng: -123.26066771576237,
-}; // Dutch Bros Coffee
 
 const CONTACT_LIST: MeansOfContact[] = [
   {
@@ -387,10 +349,6 @@ const SKILLS: Skill[] = [
 ];
 // JESSEFIX and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
-const formatInteger = (num: number) => {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-
 const getLongMonthName = (date: any) => monthNames[date.getMonth()];
 
 const getShortMonthName = (date: any) =>
@@ -520,36 +478,6 @@ class App extends Component<any, any> {
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
       this.setState({ expandedAccordionPanel: isExpanded ? panel : "" });
     };
-
-  randomizePing = () => {
-    this.setState({
-      batteryLevel: generateRandomInt(0, 100),
-      batteryMinRemaining: generateRandomInt(1, 600),
-      busId: "my-bus-id-12345",
-      busActive: generateRandomBool(),
-      connectionStrength: generateRandomInt(1, 100),
-      hasExternalPower: generateRandomBool(),
-      //photo: undefined, // JESSEFIX
-      routeId: "my-route-id-12345",
-      trackerId: "my-tracker-id-12345",
-    });
-  };
-
-  handleChange = (event: any) => {
-    // JESSEFIX any
-    let nam = event.target.name;
-    let val = event.target.value;
-    this.setState({
-      [nam]: val,
-    });
-  };
-
-  handleChange2 = (event: any) => {
-    // JESSEFIX any
-    this.setState({
-      reviewUpdate: event.target.value,
-    });
-  };
 
   render() {
     return (
@@ -692,40 +620,7 @@ class App extends Component<any, any> {
                   Location
                 </h1>
                 <Item>
-                  <List
-                    sx={{
-                      width: "100%",
-                      maxWidth: 360,
-                      bgcolor: "background.paper",
-                      paddingBottom: 0,
-                    }}
-                  >
-                    <ListItem>
-                      <div className="icon">
-                        <MyLocationIcon />
-                      </div>
-                      <ListItemText
-                        primary="Corvallis, Oregon"
-                        secondary={`${formatInteger(MILES_AWAY)} miles away`}
-                      />
-                    </ListItem>
-                    <div className="incomplete">How far away is this?</div>
-                    <SimpleMap
-                      //center={CORVALLIS_CHIPOTLE}
-                      bounds={{
-                        nw: CORVALLIS_CHIPOTLE,
-                        se: CORVALLIS_DUTCH_BROS,
-                      }}
-                      height={90}
-                      //width={"100%"}
-                      style={
-                        {
-                          //marginLeft: "auto",
-                          //marginRight: "auto",
-                        }
-                      }
-                    />
-                  </List>
+                  <MiniMap />
                 </Item>
                 <h1 className="section-header">
                   <FavoriteBorderIcon className="icon" style={{ width: 32 }} />
@@ -783,7 +678,7 @@ class App extends Component<any, any> {
                 </div>
                 <h1 className="section-header">
                   <StarsIcon className="icon" />
-                  Awards
+                  Honors
                 </h1>
                 <Item>
                   <List
@@ -792,7 +687,7 @@ class App extends Component<any, any> {
                       maxWidth: 360,
                       bgcolor: "background.paper",
                     }}
-                    id="awards"
+                    id="honors"
                   >
                     <ListItem>
                       <div className="icon">
