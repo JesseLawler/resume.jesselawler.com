@@ -121,7 +121,7 @@ a .main {
 }
 
 .experience .MuiPaper-root {
-  background: transparent; /* #25282e; */
+  background: #121212;
   padding: 0px; /*padding: 11px 15px 15px 15px;*/
   text-align: right;
 }
@@ -308,6 +308,11 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 
 #faux-github-header #legend .sample-day {
   margin-top: 9px;
+}
+
+#geolocator > div {
+  width: 100%;
+  text-align: center;
 }
 
 #qr-code-button {

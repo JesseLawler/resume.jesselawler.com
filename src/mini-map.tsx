@@ -1,6 +1,7 @@
 import React, {
   ReactElement,
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -12,31 +13,42 @@ import {
   DirectionsService,
   GoogleMap,
   useJsApiLoader,
+  useLoadScript,
 } from "@react-google-maps/api";
 import { useGeolocated } from "react-geolocated";
 import { GOOGLE_MAPS_API_KEY, GOOGLE_MAPS_API_LIBRARIES } from "./config";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
-export type GpsCoords = {
+export type LocationCoordinates = {
   lat: number;
   lng: number;
   ele?: number;
+  name?: string;
 };
 
 export type GpsBounds = {
-  nw: GpsCoords;
-  se: GpsCoords;
+  nw: LocationCoordinates;
+  se: LocationCoordinates;
 };
 
-const DEFAULT_ORIGIN = "1600 Pennsylvania Ave NW, Washington, DC 20500"; // JESSEFIX NOW
-const DEFAULT_DESTINATION = "One World Trade Center, New York, NY 10007";
+const DEFAULT_ORIGIN = {
+  lat: 40.71288895125493,
+  lng: -74.01340771473777,
+  address: "One World Trade Center, New York, NY 10007",
+  name: "New York, New York",
+};
+const DEFAULT_DESTINATION_BOISE = {
+  lat: 43.626750603536316,
+  lng: -116.31038635329202,
+  name: "Boise, Idaho",
+};
 const DEFAULT_HEIGHT = 200;
-const MILES_AWAY: number = 1234; // JESSEFIX NOW
+const METERS_PER_MILE = 1609.344;
 
 interface Props {
   bounds?: GpsBounds;
-  destination?: GpsCoords;
-  center?: GpsCoords;
+  destination?: LocationCoordinates;
+  center?: LocationCoordinates;
   height?: number;
   width?: number;
   style?: React.CSSProperties;
@@ -48,32 +60,37 @@ const formatInteger = (num: number) => {
 
 export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   const {
-    destination = DEFAULT_DESTINATION,
+    destination = DEFAULT_DESTINATION_BOISE,
     height = DEFAULT_HEIGHT,
     width = "100%",
   } = props;
 
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
     libraries: GOOGLE_MAPS_API_LIBRARIES,
   });
 
-  const originRef = useRef<HTMLInputElement | null>(null);
-  const destinationRef = useRef<HTMLInputElement | null>(null);
-
-  const [directionsFormValue, setDirectionsFormValue] = useState({
+  const [directionsFormValue, setDirectionsFormValue] = useState<{
+    origin: LocationCoordinates | null;
+    destination: LocationCoordinates;
+  }>({
     origin: DEFAULT_ORIGIN,
     destination: destination,
   });
 
+  const [distanceFromDestination, setDistanceFromDestination] = useState<
+    number | null
+  >(null); // meters
+  const [durationFromDestination, setDurationFromDestination] = useState<
+    number | null
+  >(null); // seconds
   const [map, setMap] = React.useState(null);
-
-  /*
   const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
     null
   );
-  */
+  const [userGeoLocation, setUserGeoLocation] =
+    useState<LocationCoordinates | null>(null);
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -86,40 +103,60 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       watchLocationPermissionChange: true,
     });
 
-  /*
   const directionsResult = useMemo(() => {
     console.log("response: ", response);
     return {
       directions: response,
     };
   }, [response]);
-  */
 
-  const mapOutput: ReactElement = !isGeolocationAvailable ? (
-    <div>Your browser does not support Geolocation</div>
-  ) : !isGeolocationEnabled ? (
-    <div>Geolocation is not enabled</div>
-  ) : coords ? (
-    <table>
-      <tbody>
-        <tr>
-          <td>latitude</td>
-          <td>{coords.latitude}</td>
-        </tr>
-        <tr>
-          <td>longitude</td>
-          <td>{coords.longitude}</td>
-        </tr>
-      </tbody>
-    </table>
-  ) : (
-    <div>Getting the location data&hellip; </div>
+  const geoLocatorOutput: ReactElement = (
+    <ListItem id="geolocator">
+      {!isGeolocationAvailable ? (
+        <div>Your browser does not support Geolocation.</div>
+      ) : !isGeolocationEnabled ? (
+        <div>Geolocation is not enabled.</div>
+      ) : coords ? (
+        <table style={{ display: "none" }}>
+          <tbody>
+            <tr>
+              <th>latitude</th>
+              <td>{coords.latitude}</td>
+            </tr>
+            <tr>
+              <th>longitude</th>
+              <td>{coords.longitude}</td>
+            </tr>
+          </tbody>
+        </table>
+      ) : (
+        <div>Getting the location data&hellip; </div>
+      )}
+    </ListItem>
   );
 
-  /*
-  const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
-    console.log("onClick args: ", e);
-  }, []);
+  const buildTravelRoute = useCallback<
+    React.MouseEventHandler<HTMLButtonElement>
+  >(() => {
+    if (coords !== undefined) {
+      const directionsInput = setDirectionsFormValue((currentValue) => ({
+        ...currentValue,
+        origin: convertForDirections(coords),
+        destination: destination,
+      }));
+    }
+  }, [coords]);
+
+  const convertForDirections = (
+    glcCoords?: GeolocationCoordinates
+  ): google.maps.LatLngLiteral | null => {
+    return glcCoords === undefined
+      ? null
+      : {
+          lat: glcCoords.latitude,
+          lng: glcCoords.longitude,
+        };
+  };
 
   const directionsCallback = useCallback(
     (
@@ -129,14 +166,22 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       if (result !== null) {
         if (status === "OK") {
           setResponse(result);
-        } else {
-          console.log("response: ", result);
-        }
+          setDistanceFromDestination(
+            result.routes[0].legs[0].distance?.value ?? null
+          );
+          setDurationFromDestination(
+            result.routes[0].legs[0].duration?.value ?? null
+          );
+          console.log(
+            `distanceFromDestination: ${distanceFromDestination}, durationFromDestination: ${durationFromDestination}`
+          );
+        } else console.log(`response: ${result}`);
       }
     },
     []
   );
 
+  /*
   const directionsServiceOptions =
     useMemo<google.maps.DirectionsRequest>(() => {
       return {
@@ -144,29 +189,13 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
         origin: directionsFormValue.origin,
         travelMode: google.maps.TravelMode.DRIVING,
       };
-    }, [
-      directionsFormValue.origin,
-      directionsFormValue.destination,
-    ]);
-
-  const onClick = useCallback<
-    React.MouseEventHandler<HTMLButtonElement>
-  >(() => {
-    if (
-      originRef.current &&
-      originRef.current.value !== "" &&
-      destinationRef.current &&
-      destinationRef.current.value !== ""
-    ) {
-      console.log(`looking up directions...`); // JESSEFIX NOW
-      setDirectionsFormValue((currentValue) => ({
-        ...currentValue,
-        origin: originRef.current?.value ?? "",
-        destination: destinationRef.current?.value ?? "",
-      }));
-    }
-  }, [originRef.current?.value, destinationRef.current?.value]);
+    }, [directionsFormValue.origin, directionsFormValue.destination]);
   */
+
+  const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
+    console.log("onMapClick args: ", e);
+  }, []);
+
   const onMapLoad = React.useCallback(function callback(map: any) {
     let bounds: google.maps.LatLngBounds | undefined = undefined;
 
@@ -194,11 +223,13 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     setMap(null);
   }, []);
 
-  /*
-  const userGPSCoordinates: GpsCoords | null = coords
-    ? { lat: coords?.latitude, lng: coords?.longitude }
-    : null; // JESSEFIX NOW
-  */
+  useEffect(() => {
+    console.log(`resetting userGeoLocation to: ${JSON.stringify(coords)}`);
+    setUserGeoLocation({
+      lat: coords?.latitude ?? 0,
+      lng: coords?.longitude ?? 0,
+    });
+  }, [coords?.latitude, coords?.longitude]);
 
   if (!isLoaded) return <></>;
 
@@ -216,62 +247,41 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
         borderRadius: 7,
         opacity: 0.8,
         overflow: "hidden",
+        paddingTop: 0,
       }}
     >
-      <div className="map-settings">
-        <div className="row">
-          <div className="col-md-6 col-lg-4">
-            <div className="form-group">
-              <label htmlFor="ORIGIN">Origin</label>
-              <br />
-              <input
-                id="ORIGIN"
-                className="form-control"
-                type="text"
-                ref={originRef}
-                value={directionsFormValue.origin ?? ""}
-              />
-            </div>
-          </div>
+      {geoLocatorOutput}
 
-          <div className="col-md-6 col-lg-4">
-            <div className="form-group">
-              <label htmlFor="DESTINATION">Destination</label>
-              <br />
-              <input
-                id="DESTINATION"
-                className="form-control"
-                type="text"
-                ref={destinationRef}
-                value={JSON.stringify(directionsFormValue.destination) ?? ""}
-              />
-            </div>
-          </div>
-        </div>
-
+      <div style={{ width: "100%" }}>
         <button
           className="btn btn-primary"
           type="button"
-          // JESSEFIX NOW onClick={onClick}
+          onClick={buildTravelRoute}
         >
-          Build Route
+          Build Route to {destination.name}
         </button>
       </div>
-      <ListItem>{mapOutput}</ListItem>
+
       <ListItem>
         <div className="icon">
           <MyLocationIcon />
         </div>
         <ListItemText
-          primary="Corvallis, Oregon"
-          secondary={`${formatInteger(MILES_AWAY)} miles away`}
+          primary={destination.name}
+          secondary={
+            distanceFromDestination
+              ? `${formatInteger(
+                  Math.round(distanceFromDestination / METERS_PER_MILE)
+                )} miles away`
+              : undefined
+          }
         />
       </ListItem>
       <div className="map-container">
         <GoogleMap
           center={props.center ? props.center : undefined} // Note to self: Don't give a center or user can't drag-control the map. Annoying.
           mapContainerStyle={{ width: width, height: height, ...props.style }}
-          // JESSEFIX NOW onClick={onMapClick}
+          onClick={onMapClick}
           onLoad={onMapLoad}
           onUnmount={onUnmount}
           options={{
@@ -279,18 +289,17 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           }}
           zoom={6}
         >
-          {/*
-          {directionsFormValue.destination !== "" &&
+          {/*directionsFormValue.destination !== "" &&
             directionsFormValue.origin !== "" && (
               <DirectionsService
                 options={directionsServiceOptions}
                 callback={directionsCallback}
               />
-            )}
+            )*/}
+
           {directionsResult.directions && (
             <DirectionsRenderer options={directionsResult} />
           )}
-          */}
         </GoogleMap>
       </div>
     </List>

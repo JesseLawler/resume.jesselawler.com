@@ -60,7 +60,7 @@ import {
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
 import FauxGithubHeader from "./faux-github-header";
-import { GpsCoords, MiniMap } from "./mini-map";
+import { LocationCoordinates, MiniMap } from "./mini-map";
 import { SimpleDialog } from "./qr-code-dialog";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -71,6 +71,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+type AppProps = {};
+
 type AppState = {
   autoPingsOn: boolean;
   expandedAccordionPanel: string;
@@ -79,7 +81,8 @@ type AppState = {
 };
 
 const LIFT_OF_AVATAR = 98;
-const monthNames = [
+
+const MONTH_NAMES = [
   "January",
   "February",
   "March",
@@ -127,12 +130,12 @@ const CONTACT_LIST: MeansOfContact[] = [
   },
 ];
 
-const CORVALLIS_CHIPOTLE: GpsCoords = {
+const CORVALLIS_CHIPOTLE: LocationCoordinates = {
   lat: 44.56939681150158,
   lng: -123.27912127517598,
 }; // Chipotle Mexican Grill
 
-const CORVALLIS_DUTCH_BROS: GpsCoords = {
+const CORVALLIS_DUTCH_BROS: LocationCoordinates = {
   lat: 44.5680629888922,
   lng: -123.26066771576237,
 }; // Dutch Bros Coffee
@@ -359,10 +362,10 @@ const SKILLS: Skill[] = [
 ];
 // JESSEFIX and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
-const getLongMonthName = (date: any) => monthNames[date.getMonth()];
+const getLongMonthName = (date: any) => MONTH_NAMES[date.getMonth()];
 
 const getShortMonthName = (date: any) =>
-  monthNames[date.getMonth()].substring(0, 3);
+  MONTH_NAMES[date.getMonth()].substring(0, 3);
 
 const generateRandomBool = () => Math.random() < 0.5;
 
@@ -465,13 +468,11 @@ function openInNewTab(url: string) {
   win!.focus();
 }
 
-class App extends Component<any, any> {
+class App extends Component<AppProps, AppState> {
   autoPingTimer: NodeJS.Timer | undefined;
   timestampUpdater: NodeJS.Timer | undefined;
 
-  // JESSEFIX NOW
-  constructor(props: any) {
-    // JESSEFIX
+  constructor(props: AppProps) {
     super(props);
 
     const defaults: AppState = {
@@ -636,7 +637,7 @@ class App extends Component<any, any> {
                       nw: CORVALLIS_CHIPOTLE,
                       se: CORVALLIS_DUTCH_BROS,
                     }}
-                    destination={CORVALLIS_CHIPOTLE}
+                    //destination={CORVALLIS_CHIPOTLE} // JESSEFIX NOW
                     height={90}
                     //width={"100%"}
                     style={
@@ -847,6 +848,19 @@ class App extends Component<any, any> {
                       <ListItemText
                         className="incomplete"
                         primary="Finish the Map"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        className="incomplete"
+                        primary="Obfuscate the Codes"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
