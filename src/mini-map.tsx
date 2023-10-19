@@ -16,7 +16,6 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import { useGeolocated } from "react-geolocated";
-import { GOOGLE_MAPS_API_LIBRARIES } from "./config";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
 export type LocationCoordinates = {
@@ -37,7 +36,7 @@ const DEFAULT_ORIGIN = {
   address: "One World Trade Center, New York, NY 10007",
   name: "New York, New York",
 };
-const DEFAULT_DESTINATION_BOISE = {
+const DEFAULT_DESTINATION = {
   lat: 43.626750603536316,
   lng: -116.31038635329202,
   name: "Boise, Idaho",
@@ -48,7 +47,6 @@ const METERS_PER_MILE = 1609.344;
 interface Props {
   bounds?: GpsBounds;
   destination?: LocationCoordinates;
-  center?: LocationCoordinates;
   height?: number;
   width?: number;
   style?: React.CSSProperties;
@@ -60,18 +58,12 @@ const formatInteger = (num: number) => {
 
 export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   const {
-    destination = DEFAULT_DESTINATION_BOISE,
+    destination = DEFAULT_DESTINATION,
     height = DEFAULT_HEIGHT,
     width = "100%",
   } = props;
 
-  const { isLoaded } = useLoadScript({
-    id: "google-map-script",
-    googleMapsApiKey:
-      process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.toString() ?? "",
-    libraries: GOOGLE_MAPS_API_LIBRARIES,
-  });
-
+  // JESSEFIX SOON - this naming sucks
   const [directionsFormValue, setDirectionsFormValue] = useState<{
     origin: LocationCoordinates | null;
     destination: LocationCoordinates;
@@ -99,9 +91,9 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       positionOptions: {
         enableHighAccuracy: false,
       },
-      suppressLocationOnMount: false,
-      userDecisionTimeout: undefined,
-      watchLocationPermissionChange: true,
+      //suppressLocationOnMount: false,
+      userDecisionTimeout: 5000,
+      //watchLocationPermissionChange: true,
     });
 
   const directionsResult = useMemo(() => {
@@ -118,7 +110,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       ) : !isGeolocationEnabled ? (
         <div>Geolocation is not enabled.</div>
       ) : coords ? (
-        <table style={{ display: "none" }}>
+        <table>
           <tbody>
             <tr>
               <th>latitude</th>
@@ -182,16 +174,20 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     []
   );
 
-  /*
   const directionsServiceOptions =
     useMemo<google.maps.DirectionsRequest>(() => {
       return {
         destination: directionsFormValue.destination,
-        origin: directionsFormValue.origin,
+        origin: directionsFormValue.origin as LocationCoordinates,
         travelMode: google.maps.TravelMode.DRIVING,
       };
     }, [directionsFormValue.origin, directionsFormValue.destination]);
-  */
+
+  // By placing mapCenter in a memo, we can avoid re-rendering the map each
+  // time the user drags through the map - which is possibly the most annoying thing ever.
+  const mapCenter = useMemo(() => {
+    return props.destination ?? DEFAULT_DESTINATION;
+  }, []);
 
   const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     console.log("onMapClick args: ", e);
@@ -210,8 +206,8 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       return;
     }
 
-    if (props.center) {
-      bounds = new window.google.maps.LatLngBounds(props.center);
+    if (props.destination) {
+      bounds = new window.google.maps.LatLngBounds(props.destination);
       map.fitBounds(bounds);
       setMap(map);
       return;
@@ -231,8 +227,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       lng: coords?.longitude ?? 0,
     });
   }, [coords?.latitude, coords?.longitude]);
-
-  if (!isLoaded) return <></>;
 
   return (
     <List
@@ -280,7 +274,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       </ListItem>
       <div className="map-container">
         <GoogleMap
-          center={props.center ? props.center : undefined} // Note to self: Don't give a center or user can't drag-control the map. Annoying.
+          center={mapCenter}
           mapContainerStyle={{ width: width, height: height, ...props.style }}
           onClick={onMapClick}
           onLoad={onMapLoad}
@@ -290,13 +284,12 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           }}
           zoom={6}
         >
-          {/*directionsFormValue.destination !== "" &&
-            directionsFormValue.origin !== "" && (
-              <DirectionsService
-                options={directionsServiceOptions}
-                callback={directionsCallback}
-              />
-            )*/}
+          {coords !== undefined && (
+            <DirectionsService
+              options={directionsServiceOptions}
+              callback={directionsCallback}
+            />
+          )}
 
           {directionsResult.directions && (
             <DirectionsRenderer options={directionsResult} />

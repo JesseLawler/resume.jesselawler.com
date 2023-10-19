@@ -59,7 +59,15 @@ import {
   faSass,
   faYarn,
 } from "@fortawesome/free-brands-svg-icons";
+import {
+  DirectionsRenderer,
+  DirectionsService,
+  GoogleMap,
+  useJsApiLoader,
+  useLoadScript,
+} from "@react-google-maps/api";
 import FauxGithubHeader from "./faux-github-header";
+import { GoogleApiCodeLoader } from "./google-api-code-loader";
 import { LocationCoordinates, MiniMap } from "./mini-map";
 import { SimpleDialog } from "./qr-code-dialog";
 
@@ -76,6 +84,7 @@ type AppProps = {};
 type AppState = {
   autoPingsOn: boolean;
   expandedAccordionPanel: string;
+  isGoogleApiReady: boolean;
   isQRCodeDialogOpen: boolean;
   showAllPanels: boolean;
 };
@@ -478,6 +487,7 @@ class App extends Component<AppProps, AppState> {
     const defaults: AppState = {
       autoPingsOn: false,
       expandedAccordionPanel: "",
+      isGoogleApiReady: false,
       isQRCodeDialogOpen: false,
       showAllPanels: false,
     };
@@ -490,9 +500,14 @@ class App extends Component<AppProps, AppState> {
       this.setState({ expandedAccordionPanel: isExpanded ? panel : "" });
     };
 
+  setGoogleApiReady = () => {
+    this.setState({ isGoogleApiReady: true });
+  };
+
   render() {
     return (
       <div className="App">
+        <GoogleApiCodeLoader completionCallback={this.setGoogleApiReady} />
         <div
           style={{
             border: "1px solid #303740",
@@ -631,22 +646,23 @@ class App extends Component<AppProps, AppState> {
                   Location
                 </h1>
                 <Item>
-                  <MiniMap
-                    //center={CORVALLIS_CHIPOTLE}
-                    bounds={{
-                      nw: CORVALLIS_CHIPOTLE,
-                      se: CORVALLIS_DUTCH_BROS,
-                    }}
-                    //destination={CORVALLIS_CHIPOTLE} // JESSEFIX NOW
-                    height={90}
-                    //width={"100%"}
-                    style={
-                      {
-                        //marginLeft: "auto",
-                        //marginRight: "auto",
+                  {this.state.isGoogleApiReady && (
+                    <MiniMap
+                      bounds={{
+                        nw: CORVALLIS_CHIPOTLE,
+                        se: CORVALLIS_DUTCH_BROS,
+                      }}
+                      destination={CORVALLIS_CHIPOTLE} // JESSEFIX NOW
+                      height={90}
+                      //width={"100%"}
+                      style={
+                        {
+                          //marginLeft: "auto",
+                          //marginRight: "auto",
+                        }
                       }
-                    }
-                  />
+                    />
+                  )}
                 </Item>
                 <h1 className="section-header">
                   <FavoriteBorderIcon className="icon" style={{ width: 32 }} />
@@ -848,19 +864,6 @@ class App extends Component<AppProps, AppState> {
                       <ListItemText
                         className="incomplete"
                         primary="Finish the Map"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Obfuscate the Codes"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
