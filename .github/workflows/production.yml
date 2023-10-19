@@ -1,27 +1,25 @@
-name: Production Build jesselawler.com/cv
+name: Production Build resume.jesselawler.com
 
 on:
-
   push:
-    branches: [ main ]
+    branches: [main]
 
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
-    strategy:      
-      matrix:        
-         node-version: [16.x]
+    strategy:
+      matrix:
+        node-version: [16.x]
 
-    steps:      
-      # Use the node version specified in the strategy    
-      - name: Use Node.js ${{ matrix.node-version }}      
-        uses: actions/setup-node@v1      
-        with:        
+    steps:
+      # Use the node version specified in the strategy
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
           node-version: ${{ matrix.node-version }}
 
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -34,8 +32,8 @@ jobs:
           yarn install
 
       # Build an optimized production build
-      - name: Production build      
-        run: |        
+      - name: Production build
+        run: |
           unset CI
           yarn build
 

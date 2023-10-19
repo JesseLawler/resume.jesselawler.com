@@ -16,7 +16,7 @@ import {
   useLoadScript,
 } from "@react-google-maps/api";
 import { useGeolocated } from "react-geolocated";
-import { GOOGLE_MAPS_API_KEY, GOOGLE_MAPS_API_LIBRARIES } from "./config";
+import { GOOGLE_MAPS_API_LIBRARIES } from "./config";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
 export type LocationCoordinates = {
@@ -67,7 +67,8 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
 
   const { isLoaded } = useLoadScript({
     id: "google-map-script",
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey:
+      process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.toString() ?? "",
     libraries: GOOGLE_MAPS_API_LIBRARIES,
   });
 
