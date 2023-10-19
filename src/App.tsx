@@ -653,7 +653,7 @@ class App extends Component<AppProps, AppState> {
                         nw: CORVALLIS_CHIPOTLE,
                         se: CORVALLIS_DUTCH_BROS,
                       }}
-                      destination={CORVALLIS_CHIPOTLE} // JESSEFIX NOW
+                      destination={CORVALLIS_CHIPOTLE}
                       height={90}
                       //width={"100%"}
                       style={
@@ -851,7 +851,7 @@ class App extends Component<AppProps, AppState> {
                       </ListItemAvatar>
                       <ListItemText
                         className="incomplete"
-                        primary="Finish the Map"
+                        primary="API Key Live"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
@@ -864,7 +864,7 @@ class App extends Component<AppProps, AppState> {
                       </ListItemAvatar>
                       <ListItemText
                         className="incomplete"
-                        primary="API Key Live"
+                        primary="Finish the Map"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>

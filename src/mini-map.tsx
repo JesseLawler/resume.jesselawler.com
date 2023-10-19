@@ -106,7 +106,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   const geoLocatorOutput: ReactElement = (
     <ListItem id="geolocator">
       <div>
-        JESSEFIX: {process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.toString()}
+        API Key: {process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.toString()}
       </div>
       {!isGeolocationAvailable ? (
         <div>Your browser does not support Geolocation.</div>
