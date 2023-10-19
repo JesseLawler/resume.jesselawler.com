@@ -142,6 +142,7 @@ const CONTACT_LIST: MeansOfContact[] = [
 const CORVALLIS_CHIPOTLE: LocationCoordinates = {
   lat: 44.56939681150158,
   lng: -123.27912127517598,
+  name: "Corvallis, Oregon",
 }; // Chipotle Mexican Grill
 
 const CORVALLIS_DUTCH_BROS: LocationCoordinates = {
@@ -850,7 +851,7 @@ class App extends Component<AppProps, AppState> {
                       </ListItemAvatar>
                       <ListItemText
                         className="incomplete"
-                        primary="Text Clean-up"
+                        primary="Finish the Map"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
@@ -863,7 +864,33 @@ class App extends Component<AppProps, AppState> {
                       </ListItemAvatar>
                       <ListItemText
                         className="incomplete"
-                        primary="Finish the Map"
+                        primary="API Key Live"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        className="incomplete"
+                        primary="Mobile Version"
+                        secondary="Jan 9, 2014"
+                      />
+                    </ListItem>
+                    <Divider />
+                    <ListItem>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <ImageIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        className="incomplete"
+                        primary="Text Clean-up"
                         secondary="Jan 9, 2014"
                       />
                     </ListItem>
