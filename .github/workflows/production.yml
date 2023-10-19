@@ -39,10 +39,10 @@ jobs:
           yarn build
 
       # create an .env file
-      - name: Create .env
+      - name: Create .env in the build directory
         run: |
-          echo "# this env file was automatically written by the GitHub Action, without ever having been checked into the repo." >> .env
-          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> .env
+          echo "# this env file was automatically written by the GitHub Action, without ever having been checked into the repo." >> build/.env
+          echo "GOOGLE_MAPS_API_KEY=${{ secrets.GOOGLE_MAPS_API_KEY }}" >> build/.env
 
       # Deploy to the S3 server
       - name: Deploy to S3
