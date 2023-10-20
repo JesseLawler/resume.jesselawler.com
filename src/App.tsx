@@ -143,11 +143,13 @@ const CORVALLIS_CHIPOTLE: LocationCoordinates = {
   lat: 44.56939681150158,
   lng: -123.27912127517598,
   name: "Corvallis, Oregon",
+  trivia: "home of the Oregon State Beavers",
 }; // Chipotle Mexican Grill
 
 const CORVALLIS_DUTCH_BROS: LocationCoordinates = {
   lat: 44.5680629888922,
   lng: -123.26066771576237,
+  trivia: "better coffee than Starbucks",
 }; // Dutch Bros Coffee
 
 const EDUCATION: Experience[] = [
@@ -649,11 +651,11 @@ class App extends Component<AppProps, AppState> {
                 <Item>
                   {this.state.isGoogleApiReady && (
                     <MiniMap
-                      bounds={{
-                        nw: CORVALLIS_CHIPOTLE,
-                        se: CORVALLIS_DUTCH_BROS,
-                      }}
-                      destination={CORVALLIS_CHIPOTLE}
+                      //bounds={{
+                      //  nw: CORVALLIS_CHIPOTLE,
+                      //  se: CORVALLIS_DUTCH_BROS,
+                      //}}
+                      // JESSEFIX destination={CORVALLIS_CHIPOTLE}
                       height={90}
                       //width={"100%"}
                       style={
@@ -843,19 +845,6 @@ class App extends Component<AppProps, AppState> {
                       bgcolor: "background.paper",
                     }}
                   >
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="API Key Live"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
                     <ListItem>
                       <ListItemAvatar>
                         <Avatar>

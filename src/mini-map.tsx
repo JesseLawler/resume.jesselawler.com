@@ -1,48 +1,27 @@
-import React, {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { List, ListItem, ListItemText } from "@mui/material";
 import {
   DirectionsRenderer,
   DirectionsService,
   GoogleMap,
-  useJsApiLoader,
-  useLoadScript,
 } from "@react-google-maps/api";
 import { useGeolocated } from "react-geolocated";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
+import Tooltip from "@mui/material/Tooltip";
 
 export type LocationCoordinates = {
   lat: number;
   lng: number;
   ele?: number;
+  address?: string;
   name?: string;
+  trivia: string;
 };
 
 export type GpsBounds = {
   nw: LocationCoordinates;
   se: LocationCoordinates;
 };
-
-const DEFAULT_ORIGIN = {
-  lat: 40.71288895125493,
-  lng: -74.01340771473777,
-  address: "One World Trade Center, New York, NY 10007",
-  name: "New York, New York",
-};
-const DEFAULT_DESTINATION = {
-  lat: 43.626750603536316,
-  lng: -116.31038635329202,
-  name: "Boise, Idaho",
-};
-const DEFAULT_HEIGHT = 200;
-const METERS_PER_MILE = 1609.344;
 
 interface Props {
   bounds?: GpsBounds;
@@ -52,9 +31,24 @@ interface Props {
   style?: React.CSSProperties;
 }
 
-const formatInteger = (num: number) => {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+const DEFAULT_DESTINATION: LocationCoordinates = {
+  lat: 43.626750603536316,
+  lng: -116.31038635329202,
+  name: "Boise, Idaho",
+  trivia: "eye of the potato storm",
 };
+const DEFAULT_HEIGHT = 200;
+const DEFAULT_ORIGIN: LocationCoordinates = {
+  lat: 40.71288895125493,
+  lng: -74.01340771473777,
+  address: "One World Trade Center, New York, NY 10007",
+  name: "New York, New York",
+  trivia: "the center of the universe",
+};
+const METERS_PER_MILE = 1609.344;
+
+const formatInteger = (num: number) =>
+  num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
 export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   const {
@@ -63,27 +57,11 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     width = "100%",
   } = props;
 
-  // JESSEFIX SOON - this naming sucks
-  const [directionsFormValue, setDirectionsFormValue] = useState<{
-    origin: LocationCoordinates | null;
-    destination: LocationCoordinates;
-  }>({
-    origin: DEFAULT_ORIGIN,
-    destination: destination,
-  });
-
-  const [distanceFromDestination, setDistanceFromDestination] = useState<
-    number | null
-  >(null); // meters
-  const [durationFromDestination, setDurationFromDestination] = useState<
-    number | null
-  >(null); // seconds
+  const [directionsLookUpResponse, setDirectionsLookUpResponse] =
+    useState<google.maps.DirectionsResult | null>(null);
   const [map, setMap] = React.useState(null);
-  const [response, setResponse] = useState<google.maps.DirectionsResult | null>(
-    null
-  );
-  const [userGeoLocation, setUserGeoLocation] =
-    useState<LocationCoordinates | null>(null);
+  const [travelDistance, setTravelDistance] = useState<number | null>(null); // meters
+  const [travelDuration, setTravelDuration] = useState<number | null>(null); // seconds
 
   const { coords, isGeolocationAvailable, isGeolocationEnabled } =
     useGeolocated({
@@ -96,64 +74,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
       //watchLocationPermissionChange: true,
     });
 
-  const directionsResult = useMemo(() => {
-    console.log("response: ", response);
-    return {
-      directions: response,
-    };
-  }, [response]);
-
-  const geoLocatorOutput: ReactElement = (
-    <ListItem id="geolocator">
-      <div>
-        API Key: {process.env.REACT_APP_GOOGLE_MAPS_API_KEY?.toString()}
-      </div>
-      {!isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation.</div>
-      ) : !isGeolocationEnabled ? (
-        <div>Geolocation is not enabled.</div>
-      ) : coords ? (
-        <table>
-          <tbody>
-            <tr>
-              <th>latitude</th>
-              <td>{coords.latitude}</td>
-            </tr>
-            <tr>
-              <th>longitude</th>
-              <td>{coords.longitude}</td>
-            </tr>
-          </tbody>
-        </table>
-      ) : (
-        <div>Getting the location data&hellip; </div>
-      )}
-    </ListItem>
-  );
-
-  const buildTravelRoute = useCallback<
-    React.MouseEventHandler<HTMLButtonElement>
-  >(() => {
-    if (coords !== undefined) {
-      const directionsInput = setDirectionsFormValue((currentValue) => ({
-        ...currentValue,
-        origin: convertForDirections(coords),
-        destination: destination,
-      }));
-    }
-  }, [coords]);
-
-  const convertForDirections = (
-    glcCoords?: GeolocationCoordinates
-  ): google.maps.LatLngLiteral | null => {
-    return glcCoords === undefined
-      ? null
-      : {
-          lat: glcCoords.latitude,
-          lng: glcCoords.longitude,
-        };
-  };
-
   const directionsCallback = useCallback(
     (
       result: google.maps.DirectionsResult | null,
@@ -161,15 +81,12 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     ) => {
       if (result !== null) {
         if (status === "OK") {
-          setResponse(result);
-          setDistanceFromDestination(
-            result.routes[0].legs[0].distance?.value ?? null
-          );
-          setDurationFromDestination(
-            result.routes[0].legs[0].duration?.value ?? null
-          );
+          setDirectionsLookUpResponse(result);
+          setTravelDistance(result.routes[0].legs[0].distance?.value ?? null);
+          setTravelDuration(result.routes[0].legs[0].duration?.value ?? null);
           console.log(
-            `distanceFromDestination: ${distanceFromDestination}, durationFromDestination: ${durationFromDestination}`
+            `travelDistance: ${travelDistance}, ` +
+              `travelDuration: ${travelDuration}`
           );
         } else console.log(`response: ${result}`);
       }
@@ -177,14 +94,45 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     []
   );
 
+  const directionsResult = useMemo(() => {
+    console.log("directionsLookUpResponse: ", directionsLookUpResponse);
+    return {
+      directions: directionsLookUpResponse,
+    };
+  }, [directionsLookUpResponse]);
+
   const directionsServiceOptions =
     useMemo<google.maps.DirectionsRequest>(() => {
+      let origin = coords
+        ? ({
+            lat: coords.latitude,
+            lng: coords.longitude,
+          } as google.maps.LatLngLiteral)
+        : DEFAULT_ORIGIN;
       return {
-        destination: directionsFormValue.destination,
-        origin: directionsFormValue.origin as LocationCoordinates,
+        destination: destination,
+        origin: origin,
         travelMode: google.maps.TravelMode.DRIVING,
       };
-    }, [directionsFormValue.origin, directionsFormValue.destination]);
+    }, [coords]);
+
+  const geoLocatorPrimaryOutput: string = !isGeolocationAvailable
+    ? destination.trivia
+    : !isGeolocationEnabled
+    ? destination.trivia
+    : coords
+    ? "Determining distance..."
+    : "Getting the location data...";
+
+  const geoLocatorDetailedOutput: string = !isGeolocationAvailable
+    ? "Your browser doesn't support geolocation."
+    : !isGeolocationEnabled
+    ? "Your browser's geolocation isn't enabled."
+    : coords
+    ? `Your location: lat: ${coords?.latitude.toFixed(
+        4
+      )}, lng: ${coords?.longitude.toFixed(4)}`
+    : "Looking up your geolocation data...";
 
   // By placing mapCenter in a memo, we can avoid re-rendering the map each
   // time the user drags through the map - which is possibly the most annoying thing ever.
@@ -223,14 +171,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     setMap(null);
   }, []);
 
-  useEffect(() => {
-    console.log(`resetting userGeoLocation to: ${JSON.stringify(coords)}`);
-    setUserGeoLocation({
-      lat: coords?.latitude ?? 0,
-      lng: coords?.longitude ?? 0,
-    });
-  }, [coords?.latitude, coords?.longitude]);
-
   return (
     <List
       sx={{
@@ -248,32 +188,25 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
         paddingTop: 0,
       }}
     >
-      {geoLocatorOutput}
-
-      <div style={{ width: "100%" }}>
-        <button
-          className="btn btn-primary"
-          type="button"
-          onClick={buildTravelRoute}
-        >
-          Build Route to {destination.name}
-        </button>
-      </div>
-
-      <ListItem>
+      <ListItem id="geolocator-display">
         <div className="icon">
           <MyLocationIcon />
         </div>
-        <ListItemText
-          primary={destination.name}
-          secondary={
-            distanceFromDestination
-              ? `${formatInteger(
-                  Math.round(distanceFromDestination / METERS_PER_MILE)
-                )} miles away`
-              : undefined
-          }
-        />
+        <Tooltip title={geoLocatorDetailedOutput}>
+          <ListItemText
+            primary={destination.name}
+            secondary={
+              travelDistance
+                ? `${formatInteger(
+                    Math.round(travelDistance / METERS_PER_MILE)
+                  )} miles away`
+                : geoLocatorPrimaryOutput
+            }
+            className={
+              travelDistance ? "geolocation-complete" : "geolocation-incomplete"
+            }
+          />
+        </Tooltip>
       </ListItem>
       <div className="map-container">
         <GoogleMap

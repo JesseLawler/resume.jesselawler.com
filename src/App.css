@@ -276,6 +276,21 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   scale: 1.6;
 }
 
+#geolocator-display .MuiListItemText-secondary {
+  cursor: pointer;
+}
+
+#geolocator-display > .geolocation-complete .MuiListItemText-secondary {
+  color: #fff;
+  font-weight: 200;
+}
+
+#geolocator-display > .geolocation-incomplete .MuiListItemText-secondary {
+  opacity: 0.7;
+  font-style: italic;
+  font-size: 12px;
+}
+
 #copyright {
   opacity: 0.5;
 }
@@ -308,11 +323,6 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 
 #faux-github-header #legend .sample-day {
   margin-top: 9px;
-}
-
-#geolocator > div {
-  width: 100%;
-  text-align: center;
 }
 
 #qr-code-button {
