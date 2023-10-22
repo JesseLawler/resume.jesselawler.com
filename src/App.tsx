@@ -143,7 +143,7 @@ const CORVALLIS_CHIPOTLE: LocationCoordinates = {
   lat: 44.56939681150158,
   lng: -123.27912127517598,
   name: "Corvallis, Oregon",
-  trivia: "home of the Oregon State Beavers",
+  trivia: "~90 minutes south of Portland",
 }; // Chipotle Mexican Grill
 
 const CORVALLIS_DUTCH_BROS: LocationCoordinates = {
@@ -467,6 +467,9 @@ const icon = (iconName?: string) => {
   }
 };
 
+const isDev = () =>
+  window.location.href.substring(0, 16) === "http://localhost";
+
 function Copyright() {
   return (
     <Typography variant="body2" align="center" id="copyright">
@@ -651,19 +654,12 @@ class App extends Component<AppProps, AppState> {
                 <Item>
                   {this.state.isGoogleApiReady && (
                     <MiniMap
-                      //bounds={{
-                      //  nw: CORVALLIS_CHIPOTLE,
-                      //  se: CORVALLIS_DUTCH_BROS,
-                      //}}
-                      // JESSEFIX destination={CORVALLIS_CHIPOTLE}
+                      bounds={{
+                        nw: CORVALLIS_CHIPOTLE,
+                        se: CORVALLIS_DUTCH_BROS,
+                      }}
+                      destination={CORVALLIS_CHIPOTLE}
                       height={90}
-                      //width={"100%"}
-                      style={
-                        {
-                          //marginLeft: "auto",
-                          //marginRight: "auto",
-                        }
-                      }
                     />
                   )}
                 </Item>
@@ -832,60 +828,49 @@ class App extends Component<AppProps, AppState> {
               <Grid item xs={12}>
                 <hr />
               </Grid>
-              <Grid item xs={4}>
-                <h1 className="section-header">
-                  <CheckIcon className="icon" />
-                  To-Do's
-                </h1>
-                <Item>
-                  <List
-                    sx={{
-                      width: "100%",
-                      maxWidth: 360,
-                      bgcolor: "background.paper",
-                    }}
-                  >
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Finish the Map"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Mobile Version"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <ListItem>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        className="incomplete"
-                        primary="Text Clean-up"
-                        secondary="Jan 9, 2014"
-                      />
-                    </ListItem>
-                  </List>
-                </Item>
-              </Grid>
+              {isDev() && (
+                <Grid item xs={4}>
+                  <h1 className="section-header">
+                    <CheckIcon className="icon" />
+                    To-Do's
+                  </h1>
+                  <Item>
+                    <List
+                      sx={{
+                        width: "100%",
+                        maxWidth: 360,
+                        bgcolor: "background.paper",
+                      }}
+                    >
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <ImageIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          className="incomplete"
+                          primary="Mobile Version"
+                          secondary="Jan 9, 2014"
+                        />
+                      </ListItem>
+                      <Divider />
+                      <ListItem>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <ImageIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          className="incomplete"
+                          primary="Text Clean-up"
+                          secondary="Jan 9, 2014"
+                        />
+                      </ListItem>
+                    </List>
+                  </Item>
+                </Grid>
+              )}
               <Grid item xs={4}>
                 <Item>
                   <FormGroup>

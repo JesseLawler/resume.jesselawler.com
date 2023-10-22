@@ -129,9 +129,9 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     : !isGeolocationEnabled
     ? "Your browser's geolocation isn't enabled."
     : coords
-    ? `Your location: lat: ${coords?.latitude.toFixed(
+    ? `Your location: latitude: ${coords?.latitude.toFixed(
         4
-      )}, lng: ${coords?.longitude.toFixed(4)}`
+      )}, longitude: ${coords?.longitude.toFixed(4)}`
     : "Looking up your geolocation data...";
 
   // By placing mapCenter in a memo, we can avoid re-rendering the map each
@@ -139,6 +139,15 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
   const mapCenter = useMemo(() => {
     return props.destination ?? DEFAULT_DESTINATION;
   }, []);
+
+  const milesAwayNumeric = travelDistance
+    ? Math.round(travelDistance / METERS_PER_MILE)
+    : null;
+  let milesAway: string = "";
+  if (milesAwayNumeric) {
+    if (Math.round(milesAwayNumeric) <= 1) milesAway = "less than a mile away";
+    else milesAway = `${formatInteger(milesAwayNumeric)} miles away`;
+  }
 
   const onMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     console.log("onMapClick args: ", e);
@@ -195,13 +204,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
         <Tooltip title={geoLocatorDetailedOutput}>
           <ListItemText
             primary={destination.name}
-            secondary={
-              travelDistance
-                ? `${formatInteger(
-                    Math.round(travelDistance / METERS_PER_MILE)
-                  )} miles away`
-                : geoLocatorPrimaryOutput
-            }
+            secondary={travelDistance ? milesAway : geoLocatorPrimaryOutput}
             className={
               travelDistance ? "geolocation-complete" : "geolocation-incomplete"
             }
@@ -218,7 +221,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           options={{
             streetViewControl: false,
           }}
-          zoom={6}
+          zoom={5}
         >
           {coords !== undefined && (
             <DirectionsService
