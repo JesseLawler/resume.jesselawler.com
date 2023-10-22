@@ -77,7 +77,7 @@ a:hover .MuiListItem-root:not(:last-child) {
   border-bottom: 1px solid #ffcc1176;
 }
 
-.MuiSwitch-switchBase {
+.MuiSwitch-switchBase.Mui-checked {
   color: #00ee00 !important;
 }
 
@@ -304,11 +304,18 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 }
 
 #copyright {
+  color: #999999;
   position: absolute;
-  bottom: -35px;
+  bottom: -55px;
   left: 0px;
   width: 100%;
-  opacity: 0.4;
+  padding-bottom: 20px;
+  opacity: 0.8;
+}
+
+#copyright a {
+  color: #20e442;
+  text-decoration: none;
 }
 
 #faux-github-header tbody td {
@@ -378,6 +385,10 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   opacity: 0.8;
 }
 
+label#toggle-show-all-panels {
+  margin-top: 3px;
+}
+
 label#toggle-show-all-panels .MuiTypography-root {
   color: #ffffffee;
   font-size: 0.8rem;
@@ -406,11 +417,6 @@ label#toggle-show-all-panels .MuiTypography-root {
 @media print {
   #primary-container {
     border-width: 0px;
-  }
-
-  /* Note to self: For some reason, passing a CSS class to this button seems to fail. */
-  #button-print {
-    display: none;
   }
 
   .hide-if-printing {

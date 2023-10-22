@@ -1,5 +1,11 @@
 import React from "react";
+import PrintIcon from "@mui/icons-material/Print";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import Switch from "@mui/material/Switch";
 import Tooltip from "@mui/material/Tooltip";
+import { FormControl } from "@mui/material";
 
 const numWeeks = 52;
 
@@ -8,11 +14,12 @@ const DAY_DIMENSION = 11;
 const DAYS_OF_WEEK = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 const EMPTY_DAY_COLOR = "#262a2f";
 const MICROSECONDS_IN_DAY = 86400000;
+const SHOW_CONTROLS = true;
 
 type FauxGithubHeaderProps = {
-  height?: number;
   width?: number;
-  lowerRightElement?: JSX.Element | null;
+  onClickPrint?: () => void;
+  onToggleShowAll?: () => void;
 };
 
 const MonthName = (month: number): string => {
@@ -34,7 +41,7 @@ const MonthName = (month: number): string => {
 export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
   props: FauxGithubHeaderProps
 ): JSX.Element => {
-  const { height = 100, width = "100%", lowerRightElement = null } = props;
+  const { width = "100%" } = props;
 
   const displayDayName = (day: string): boolean =>
     day === "Mon" || day === "Wed" || day === "Fri";
@@ -118,6 +125,40 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
       <span className="sample-day">{dayMarker(3)}</span>
       <span className="sample-day">{dayMarker(4)}</span>
       <span style={{ marginLeft: 4 }}>More</span>
+    </div>
+  );
+
+  const controlPanel = (
+    <div className="hide-if-printing">
+      <FormGroup row>
+        <FormControl>
+          <FormControlLabel
+            id="toggle-show-all-panels"
+            control={
+              <Switch
+                size={"small"}
+                onChange={props.onToggleShowAll}
+                color={"default"}
+              />
+            }
+            label="show all"
+          />
+        </FormControl>
+        <FormControl>
+          <Button
+            id="button-print"
+            //variant="outlined"
+            color="success"
+            size="small"
+            startIcon={<PrintIcon />}
+            aria-label="print"
+            style={{ width: 100 }}
+            onClick={props.onClickPrint}
+          >
+            Print
+          </Button>
+        </FormControl>
+      </FormGroup>
     </div>
   );
 
@@ -226,7 +267,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
                   maxHeight: 22,
                 }}
               >
-                {props.lowerRightElement ? (
+                {SHOW_CONTROLS ? (
                   colorCodingLegend
                 ) : (
                   <Tooltip
@@ -252,9 +293,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
                   maxHeight: 20,
                 }}
               >
-                {props.lowerRightElement
-                  ? props.lowerRightElement
-                  : colorCodingLegend}
+                {SHOW_CONTROLS ? controlPanel : colorCodingLegend}
               </div>
             </td>
           </tr>

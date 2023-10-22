@@ -9,16 +9,12 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormGroup from "@mui/material/FormGroup";
 import Grid from "@mui/material/Grid";
 import { List, ListItem, ListItemAvatar, ListItemText } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "./main.css";
@@ -30,7 +26,6 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ImageIcon from "@mui/icons-material/Image";
 import SchoolIcon from "@mui/icons-material/School";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import PrintIcon from "@mui/icons-material/Print";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GoogleIcon from "@mui/icons-material/Google";
 import FaceIcon from "@mui/icons-material/Face";
@@ -480,6 +475,21 @@ function Copyright() {
     <div id="copyright">
       <Typography variant="body2" align="center">
         copyright © Jesse Lawler {new Date().getFullYear()}
+        <span style={{ margin: "0px 10px 0px 14px" }}>&bull;</span>
+        <a
+          href="https://github.com/JesseLawler/resume.jesselawler.com"
+          target="_blank"
+        >
+          <CodeIcon
+            style={{
+              marginLeft: 1,
+              marginRight: 5,
+              marginBottom: -7,
+              width: 22,
+            }}
+          />
+          view source code
+        </a>
       </Typography>
     </div>
   );
@@ -514,6 +524,22 @@ class App extends Component<AppProps, AppState> {
       this.setState({ expandedAccordionPanel: isExpanded ? panel : "" });
     };
 
+  handleClickPrint = () => {
+    this.setState({
+      printMostRecentClickTimestamp: new Date().getTime(),
+    });
+    setTimeout(() => {
+      window.print(); // open the print dialog only after the state change
+    }, DELAY_BEFORE_PRINTING);
+  };
+
+  handleToggleShowAll = () => {
+    console.log("toggling the open state of all panels...");
+    this.setState({
+      showAllPanels: !this.state.showAllPanels,
+    });
+  };
+
   printClickedInPast15Seconds = () => {
     const now = new Date().getTime();
     const fifteenSecondsAgo = now - 15000;
@@ -524,47 +550,6 @@ class App extends Component<AppProps, AppState> {
     this.setState({ isGoogleApiReady: true });
   };
 
-  controlPanel = (
-    <FormGroup row>
-      <FormControlLabel
-        id="toggle-show-all-panels"
-        control={
-          <Switch
-            //checked={this.state.showAllPanels}
-            size={"small"}
-            onChange={() => {
-              console.log("toggling the open state of all panels...");
-              //this.setState({
-              //  showAllPanels: !this.state.showAllPanels,
-              //});
-            }}
-            color={"default"}
-          />
-        }
-        label="show all"
-      />
-      <Button
-        id="button-print"
-        //variant="outlined"
-        color="success"
-        size="small"
-        startIcon={<PrintIcon />}
-        aria-label="print"
-        style={{ width: 100 }}
-        onClick={() => {
-          this.setState({
-            printMostRecentClickTimestamp: new Date().getTime(),
-          });
-          setTimeout(() => {
-            window.print(); // open the print dialog only after the state change
-          }, DELAY_BEFORE_PRINTING);
-        }}
-      >
-        Print
-      </Button>
-    </FormGroup>
-  );
-
   render() {
     return (
       <div className="App">
@@ -573,7 +558,10 @@ class App extends Component<AppProps, AppState> {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} style={{ marginBottom: 36 }}>
-                <FauxGithubHeader lowerRightElement={this.controlPanel} />
+                <FauxGithubHeader
+                  onToggleShowAll={this.handleToggleShowAll}
+                  onClickPrint={this.handleClickPrint}
+                />
               </Grid>
               <Grid item md={4} xs={6} className="experience">
                 <h1 className="section-header elevated">
