@@ -12,6 +12,7 @@ const MICROSECONDS_IN_DAY = 86400000;
 type FauxGithubHeaderProps = {
   height?: number;
   width?: number;
+  lowerRightElement?: JSX.Element | null;
 };
 
 const MonthName = (month: number): string => {
@@ -33,7 +34,7 @@ const MonthName = (month: number): string => {
 export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
   props: FauxGithubHeaderProps
 ): JSX.Element => {
-  const { height = 100, width = "100%" } = props;
+  const { height = 100, width = "100%", lowerRightElement = null } = props;
 
   const displayDayName = (day: string): boolean =>
     day === "Mon" || day === "Wed" || day === "Fri";
@@ -107,6 +108,18 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
     }
     return "";
   };
+
+  const colorCodingLegend = (
+    <div id="legend">
+      <span style={{ marginRight: 4 }}>Less</span>
+      <span className="sample-day">{dayMarker(0)}</span>
+      <span className="sample-day">{dayMarker(1)}</span>
+      <span className="sample-day">{dayMarker(2)}</span>
+      <span className="sample-day">{dayMarker(3)}</span>
+      <span className="sample-day">{dayMarker(4)}</span>
+      <span style={{ marginLeft: 4 }}>More</span>
+    </div>
+  );
 
   return (
     <div
@@ -204,25 +217,44 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={numWeeks + 1} style={{ verticalAlign: "middle" }}>
-              <Tooltip
-                title={
-                  "This isn't real data. I just think it looks cool. Design inspiration: GitHub"
-                }
-                placement="top"
+            <td></td>
+            <td colSpan={numWeeks} style={{ verticalAlign: "middle" }}>
+              <div
+                style={{
+                  float: "left",
+                  marginTop: 5,
+                  maxHeight: 22,
+                }}
               >
-                <div style={{ float: "left", cursor: "pointer" }}>
-                  Learn how we count contributions
-                </div>
-              </Tooltip>
-              <div id="legend">
-                <span style={{ marginRight: 4 }}>Less</span>
-                <span className="sample-day">{dayMarker(0)}</span>
-                <span className="sample-day">{dayMarker(1)}</span>
-                <span className="sample-day">{dayMarker(2)}</span>
-                <span className="sample-day">{dayMarker(3)}</span>
-                <span className="sample-day">{dayMarker(4)}</span>
-                <span style={{ marginLeft: 4 }}>More</span>
+                {props.lowerRightElement ? (
+                  colorCodingLegend
+                ) : (
+                  <Tooltip
+                    title={
+                      "This isn't real data. I just think it looks cool. Design inspiration: GitHub"
+                    }
+                    placement="top"
+                  >
+                    <div
+                      className="hide-if-printing"
+                      style={{ float: "left", cursor: "pointer" }}
+                    >
+                      Learn how we count contributions
+                    </div>
+                  </Tooltip>
+                )}
+              </div>
+              <div
+                className="hide-if-narrow"
+                style={{
+                  float: "right",
+                  marginTop: 5,
+                  maxHeight: 20,
+                }}
+              >
+                {props.lowerRightElement
+                  ? props.lowerRightElement
+                  : colorCodingLegend}
               </div>
             </td>
           </tr>

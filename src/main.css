@@ -1,6 +1,8 @@
 /***** FUTURE TO-DO's - MAKE THIS DYNAMIC CSS *****
 
 Hover Color: #ffcc11
+Control Label color: #ffffffee;
+Control Label font-weight: 400;
 
 **************************************************/
 
@@ -272,6 +274,16 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   }
 }
 
+#button-print {
+  color: #ffffffee;
+  font-size: 0.8rem;
+  font-weight: 400;
+}
+
+#button-print svg {
+  color: rgba(0, 238, 0, 0.8);
+}
+
 #honors .MuiListItem-root .icon svg {
   scale: 1.6;
 }
@@ -292,7 +304,11 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 }
 
 #copyright {
-  opacity: 0.5;
+  position: absolute;
+  bottom: -35px;
+  left: 0px;
+  width: 100%;
+  opacity: 0.4;
 }
 
 #faux-github-header tbody td {
@@ -313,7 +329,6 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 }
 
 #faux-github-header #legend {
-  float: right;
   display: flex;
 }
 
@@ -326,9 +341,12 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
 }
 
 #primary-container {
+  position: relative;
   border: 1px solid #303740;
   border-top-width: 0px;
-  border-bottom-width: 0px;
+  /* border-bottom-width: 0px; */
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
@@ -360,23 +378,42 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   opacity: 0.8;
 }
 
+label#toggle-show-all-panels .MuiTypography-root {
+  color: #ffffffee;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  margin: 0px 0px 0px 3px;
+}
+
+/* override styles when narrow - collapsing grid to 2 columns */
 @media (max-width: 899px) {
+  .chip-party {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
   .section-header.elevated.only-if-wide {
     margin-top: 0px;
+  }
+
+  .hide-if-narrow {
+    display: none;
   }
 }
 
 /* override styles when printing */
 @media print {
-  body {
-    background-color: #fff000;
-  }
-
   #primary-container {
     border-width: 0px;
   }
 
-  .hide-on-print {
+  /* Note to self: For some reason, passing a CSS class to this button seems to fail. */
+  #button-print {
+    display: none;
+  }
+
+  .hide-if-printing {
     display: none;
   }
 }

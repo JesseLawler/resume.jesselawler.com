@@ -9,6 +9,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -29,6 +30,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import ImageIcon from "@mui/icons-material/Image";
 import SchoolIcon from "@mui/icons-material/School";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import PrintIcon from "@mui/icons-material/Print";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GoogleIcon from "@mui/icons-material/Google";
 import FaceIcon from "@mui/icons-material/Face";
@@ -86,8 +88,11 @@ type AppState = {
   expandedAccordionPanel: string;
   isGoogleApiReady: boolean;
   isQRCodeDialogOpen: boolean;
+  printMostRecentClickTimestamp: number;
   showAllPanels: boolean;
 };
+
+const DELAY_BEFORE_PRINTING = 700; // milliseconds
 
 const LIFT_OF_AVATAR = 98;
 
@@ -472,9 +477,11 @@ const isDev = () =>
 
 function Copyright() {
   return (
-    <Typography variant="body2" align="center" id="copyright">
-      copyright © Jesse Lawler {new Date().getFullYear()}
-    </Typography>
+    <div id="copyright">
+      <Typography variant="body2" align="center">
+        copyright © Jesse Lawler {new Date().getFullYear()}
+      </Typography>
+    </div>
   );
 }
 
@@ -495,6 +502,7 @@ class App extends Component<AppProps, AppState> {
       expandedAccordionPanel: "",
       isGoogleApiReady: false,
       isQRCodeDialogOpen: false,
+      printMostRecentClickTimestamp: 0,
       showAllPanels: false,
     };
 
@@ -506,9 +514,56 @@ class App extends Component<AppProps, AppState> {
       this.setState({ expandedAccordionPanel: isExpanded ? panel : "" });
     };
 
+  printClickedInPast15Seconds = () => {
+    const now = new Date().getTime();
+    const fifteenSecondsAgo = now - 15000;
+    return this.state.printMostRecentClickTimestamp > fifteenSecondsAgo;
+  };
+
   setGoogleApiReady = () => {
     this.setState({ isGoogleApiReady: true });
   };
+
+  controlPanel = (
+    <FormGroup row>
+      <FormControlLabel
+        id="toggle-show-all-panels"
+        control={
+          <Switch
+            //checked={this.state.showAllPanels}
+            size={"small"}
+            onChange={() => {
+              console.log("toggling the open state of all panels...");
+              //this.setState({
+              //  showAllPanels: !this.state.showAllPanels,
+              //});
+            }}
+            color={"default"}
+          />
+        }
+        label="show all"
+      />
+      <Button
+        id="button-print"
+        //variant="outlined"
+        color="success"
+        size="small"
+        startIcon={<PrintIcon />}
+        aria-label="print"
+        style={{ width: 100 }}
+        onClick={() => {
+          this.setState({
+            printMostRecentClickTimestamp: new Date().getTime(),
+          });
+          setTimeout(() => {
+            window.print(); // open the print dialog only after the state change
+          }, DELAY_BEFORE_PRINTING);
+        }}
+      >
+        Print
+      </Button>
+    </FormGroup>
+  );
 
   render() {
     return (
@@ -518,7 +573,7 @@ class App extends Component<AppProps, AppState> {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} style={{ marginBottom: 36 }}>
-                <FauxGithubHeader />
+                <FauxGithubHeader lowerRightElement={this.controlPanel} />
               </Grid>
               <Grid item md={4} xs={6} className="experience">
                 <h1 className="section-header elevated">
@@ -538,6 +593,7 @@ class App extends Component<AppProps, AppState> {
                       <Accordion
                         expanded={
                           this.state.showAllPanels ||
+                          this.printClickedInPast15Seconds() ||
                           this.state.expandedAccordionPanel ===
                             `experience-panel-${index}`
                         }
@@ -590,6 +646,7 @@ class App extends Component<AppProps, AppState> {
                   <a
                     href="#"
                     onClick={() => this.setState({ isQRCodeDialogOpen: true })}
+                    className="hide-if-narrow"
                   >
                     <img
                       src="/images/qr-code.png"
@@ -794,6 +851,7 @@ class App extends Component<AppProps, AppState> {
                             <Accordion
                               expanded={
                                 this.state.showAllPanels ||
+                                this.printClickedInPast15Seconds() ||
                                 this.state.expandedAccordionPanel ===
                                   `education-panel-${index}`
                               }
@@ -828,69 +886,8 @@ class App extends Component<AppProps, AppState> {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <hr />
-              </Grid>
-              {isDev() && (
-                <Grid item md={4} xs={6}>
-                  <h1 className="section-header">
-                    <CheckIcon className="icon" />
-                    To-Do's
-                  </h1>
-                  <Item>
-                    <List
-                      sx={{
-                        width: "100%",
-                        bgcolor: "background.paper",
-                      }}
-                    >
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <ImageIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          className="incomplete"
-                          primary="Text Clean-up"
-                          secondary="Jan 9, 2014"
-                        />
-                      </ListItem>
-                    </List>
-                  </Item>
-                </Grid>
-              )}
-              <Grid item md={4} xs={6}>
-                <Item>
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={this.state.showAllPanels}
-                          onChange={() => {
-                            console.log(
-                              "toggling the open state of all panels..."
-                            );
-                            this.setState({
-                              showAllPanels: !this.state.showAllPanels,
-                            });
-                          }}
-                          color={"default"}
-                        />
-                      }
-                      label="Toggle all panels open"
-                      style={{ marginLeft: "auto", marginRight: "auto" }}
-                    />
-                  </FormGroup>
-                </Item>
-              </Grid>
-              <Grid item xs={4}></Grid>
-              <Grid item xs={12}>
-                <Box sx={{ my: 2 }}>
-                  <Copyright />
-                </Box>
-              </Grid>
             </Grid>
+            <Copyright />
           </Box>
         </div>
 
