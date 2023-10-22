@@ -531,7 +531,7 @@ class App extends Component<AppProps, AppState> {
               <Grid item xs={12} style={{ marginBottom: 36 }}>
                 <FauxGithubHeader />
               </Grid>
-              <Grid item xs={4} className="experience">
+              <Grid item md={4} xs={6} className="experience">
                 <h1 className="section-header elevated">
                   <CheckCircleIcon className="icon" />
                   Experience
@@ -580,7 +580,8 @@ class App extends Component<AppProps, AppState> {
               </Grid>
               <Grid
                 item
-                xs={4}
+                md={4}
+                xs={6}
                 style={{
                   position: "relative",
                 }}
@@ -675,8 +676,8 @@ class App extends Component<AppProps, AppState> {
                   Coast time zone from the West Coast.
                 </div>
               </Grid>
-              <Grid item xs={4}>
-                <h1 className="section-header elevated">
+              <Grid item md={4} xs={12}>
+                <h1 className="section-header elevated only-if-wide">
                   <CodeIcon className="icon" />
                   Skills
                 </h1>
@@ -717,119 +718,134 @@ class App extends Component<AppProps, AppState> {
                     );
                   })}
                 </div>
-                <h1 className="section-header">
-                  <StarsIcon className="icon" />
-                  Honors
-                </h1>
-                <Item>
-                  <List
-                    sx={{
-                      width: "100%",
-                      maxWidth: 360,
-                      bgcolor: "background.paper",
-                    }}
-                    id="honors"
-                  >
-                    <ListItem>
-                      <div className="icon">
-                        <FontAwesomeIcon icon={faUserGraduate} />
-                      </div>
-                      <ListItemText
-                        primary="Summa Cum Laude"
-                        secondary="University of Oregon, 1997"
-                      />
-                    </ListItem>
-                    <Divider />
-                    <a
-                      onClick={() => {
-                        window.open(
-                          "https://www.spaghettimonster.org/",
-                          "_blank"
-                        );
-                      }}
-                    >
-                      <ListItem>
-                        <div className="icon">
-                          <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
-                        </div>
-
-                        <ListItemText
-                          primary="Ordained Minister"
-                          secondary="Church of the Flying Spaghetti Monster"
-                        />
-                      </ListItem>
-                    </a>
-                    <a
-                      onClick={() => {
-                        window.open("https://birdsarentreal.com/", "_blank");
-                      }}
-                    >
-                      <ListItem style={{ display: "none" }}>
-                        <div className="icon">
-                          <FontAwesomeIcon icon={faSpaghettiMonsterFlying} />
-                        </div>
-
-                        <ListItemText
-                          primary="Activist of the Year, 2021"
-                          secondary="Birds Aren't Real"
-                        />
-                      </ListItem>
-                    </a>
-                  </List>
-                </Item>
-                <h1 className="section-header">
-                  <SchoolIcon className="icon" />
-                  Education
-                </h1>
-                <div className="experience education">
-                  {EDUCATION.map((e: Experience, index: number) => (
-                    <Item key={`edu-${index}`}>
-                      <div
-                        onMouseOver={() =>
-                          this.setState({
-                            expandedAccordionPanel:
-                              "education-panel-" + index.toString(),
-                          })
-                        }
+                <Grid container spacing={2}>
+                  <Grid item md={12} xs={6}>
+                    <h1 className="section-header">
+                      <StarsIcon className="icon" />
+                      Honors
+                    </h1>
+                    <Item>
+                      <List
+                        sx={{
+                          width: "100%",
+                          maxWidth: 360,
+                          bgcolor: "background.paper",
+                        }}
+                        id="honors"
                       >
-                        <Accordion
-                          expanded={
-                            this.state.showAllPanels ||
-                            this.state.expandedAccordionPanel ===
-                              `education-panel-${index}`
-                          }
-                          onChange={this.handleAccordionChange(
-                            "education-panel-" + index.toString()
-                          )}
+                        <ListItem>
+                          <div className="icon">
+                            <FontAwesomeIcon icon={faUserGraduate} />
+                          </div>
+                          <ListItemText
+                            primary="Summa Cum Laude"
+                            secondary="University of Oregon, 1997"
+                          />
+                        </ListItem>
+                        <Divider />
+                        <a
+                          onClick={() => {
+                            window.open(
+                              "https://www.spaghettimonster.org/",
+                              "_blank"
+                            );
+                          }}
                         >
-                          <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
-                            aria-controls={`education-panel-${index}-content`}
-                          >
-                            <div className="institution">{e.institution}</div>
-                            <div className="role">{e.role}</div>
-                            <div className="period">
-                              {`${getLongMonthName(
-                                new Date(e.start.year, e.start.month)
-                              )} ${e.start.year}  - ${getLongMonthName(
-                                new Date(e.end.year, e.end.month)
-                              )} ${e.end.year}`}
+                          <ListItem>
+                            <div className="icon">
+                              <FontAwesomeIcon
+                                icon={faSpaghettiMonsterFlying}
+                              />
                             </div>
-                          </AccordionSummary>
-                          <AccordionDetails className="description">
-                            {e.description}
-                          </AccordionDetails>
-                        </Accordion>
-                      </div>
+
+                            <ListItemText
+                              primary="Ordained Minister"
+                              secondary="Church of the Flying Spaghetti Monster"
+                            />
+                          </ListItem>
+                        </a>
+                        <a
+                          onClick={() => {
+                            window.open(
+                              "https://birdsarentreal.com/",
+                              "_blank"
+                            );
+                          }}
+                        >
+                          <ListItem style={{ display: "none" }}>
+                            <div className="icon">
+                              <FontAwesomeIcon
+                                icon={faSpaghettiMonsterFlying}
+                              />
+                            </div>
+
+                            <ListItemText
+                              primary="Activist of the Year, 2021"
+                              secondary="Birds Aren't Real"
+                            />
+                          </ListItem>
+                        </a>
+                      </List>
                     </Item>
-                  ))}
-                </div>
+                  </Grid>
+                  <Grid item md={12} xs={6}>
+                    <h1 className="section-header">
+                      <SchoolIcon className="icon" />
+                      Education
+                    </h1>
+                    <div className="experience education">
+                      {EDUCATION.map((e: Experience, index: number) => (
+                        <Item key={`edu-${index}`}>
+                          <div
+                            onMouseOver={() =>
+                              this.setState({
+                                expandedAccordionPanel:
+                                  "education-panel-" + index.toString(),
+                              })
+                            }
+                          >
+                            <Accordion
+                              expanded={
+                                this.state.showAllPanels ||
+                                this.state.expandedAccordionPanel ===
+                                  `education-panel-${index}`
+                              }
+                              onChange={this.handleAccordionChange(
+                                "education-panel-" + index.toString()
+                              )}
+                            >
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls={`education-panel-${index}-content`}
+                              >
+                                <div className="institution">
+                                  {e.institution}
+                                </div>
+                                <div className="role">{e.role}</div>
+                                <div className="period">
+                                  {`${getLongMonthName(
+                                    new Date(e.start.year, e.start.month)
+                                  )} ${e.start.year}  - ${getLongMonthName(
+                                    new Date(e.end.year, e.end.month)
+                                  )} ${e.end.year}`}
+                                </div>
+                              </AccordionSummary>
+                              <AccordionDetails className="description">
+                                {e.description}
+                              </AccordionDetails>
+                            </Accordion>
+                          </div>
+                        </Item>
+                      ))}
+                    </div>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item xs={12}>
                 <hr />
               </Grid>
               {isDev() && (
-                <Grid item xs={4}>
+                <Grid item md={4} xs={6}>
                   <h1 className="section-header">
                     <CheckIcon className="icon" />
                     To-Do's
@@ -871,7 +887,7 @@ class App extends Component<AppProps, AppState> {
                   </Item>
                 </Grid>
               )}
-              <Grid item xs={4}>
+              <Grid item md={4} xs={6}>
                 <Item>
                   <FormGroup>
                     <FormControlLabel

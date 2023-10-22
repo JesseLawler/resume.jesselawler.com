@@ -117,6 +117,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
         borderRadius: 7,
         padding: "10px 25px 10px 25px",
         opacity: 0.8,
+        overflow: "scroll" /* JESSEFIX scroll to the right by default */,
       }}
     >
       <table style={{ width: "100%" }}>

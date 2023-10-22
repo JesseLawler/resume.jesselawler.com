@@ -348,3 +348,9 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   text-align: left;
   opacity: 0.8;
 }
+
+@media (max-width: 899px) {
+  .section-header.elevated.only-if-wide {
+    margin-top: 0px;
+  }
+}
