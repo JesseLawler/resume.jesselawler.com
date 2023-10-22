@@ -184,7 +184,6 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
     <List
       sx={{
         width: "100%",
-        maxWidth: 360,
         bgcolor: "background.paper",
         paddingBottom: 0,
       }}
@@ -211,7 +210,7 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           />
         </Tooltip>
       </ListItem>
-      <div className="map-container">
+      <div className="map-container hide-on-print">
         <GoogleMap
           center={mapCenter}
           mapContainerStyle={{ width: width, height: height, ...props.style }}

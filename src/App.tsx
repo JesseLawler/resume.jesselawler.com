@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import "./App.css";
+import "./main.css";
 import CheckIcon from "@mui/icons-material/Check";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -514,18 +514,7 @@ class App extends Component<AppProps, AppState> {
     return (
       <div className="App">
         <GoogleApiCodeLoader completionCallback={this.setGoogleApiReady} />
-        <div
-          style={{
-            border: "1px solid #303740",
-            borderTopWidth: 0,
-            borderBottomWidth: 0,
-            maxWidth: 940,
-            marginLeft: "auto",
-            marginRight: "auto",
-            padding: 20,
-            paddingTop: 15,
-          }}
-        >
+        <div id="primary-container">
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} style={{ marginBottom: 36 }}>
@@ -613,7 +602,6 @@ class App extends Component<AppProps, AppState> {
                   <List
                     sx={{
                       width: "100%",
-                      maxWidth: 360,
                       bgcolor: "background.paper",
                     }}
                   >
@@ -728,7 +716,6 @@ class App extends Component<AppProps, AppState> {
                       <List
                         sx={{
                           width: "100%",
-                          maxWidth: 360,
                           bgcolor: "background.paper",
                         }}
                         id="honors"
@@ -854,23 +841,9 @@ class App extends Component<AppProps, AppState> {
                     <List
                       sx={{
                         width: "100%",
-                        maxWidth: 360,
                         bgcolor: "background.paper",
                       }}
                     >
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <ImageIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          className="incomplete"
-                          primary="Mobile Version"
-                          secondary="Jan 9, 2014"
-                        />
-                      </ListItem>
-                      <Divider />
                       <ListItem>
                         <ListItemAvatar>
                           <Avatar>
