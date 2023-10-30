@@ -167,42 +167,41 @@ const EDUCATION: Experience[] = [
 const EXPERIENCES: Experience[] = [
   {
     institution: "Scribeware",
-    role: "Lead React-Native Developer",
-    description: `Executed major version upgrade to multiplatform (iOS, Android, Mac + Windows desktop) React-Native/React application with Firebase backend and heavy data-sync requirements.  Designed and implemented new functional components; removed performance bottlenecks; massively simplified and harmonized a large codebase that had grown “organically” for ~10 years.
-This role was a 6-month contract.`,
+    role: "Lead Mobile Developer",
+    description: `Executed major version upgrade for a multiplatform React-Native/React app with Firebase backend and heavy data-sync requirements.\n
+    Implemented new components, customized libraries, removed performance bottlenecks, harmonized large codebase for code re-use and long-term maintainability. (This role was a 6-month contract.)`,
     start: { year: 2023, month: 3 },
     end: { year: 2023, month: 8 },
   },
   {
     institution: "Podzilla",
     role: "Senior Full-Stack Engineer",
-    description:
-      "Soup-to-nuts system architecture + implementation for React-Native “podcatcher” mobile app including custom API, third-party integrations, serverless back-end, public-facing UI/UX, error-handling of public RSS data, automated test suite.",
+    description: `Full system architecture and implementation for “podcatcher” mobile app built in React-Native using AWS serverless back-end (Lambda, DynamoDB, Cognito, S3, API Gateway...).\n
+      Designed public-facing UI/UX, automated test suite, error handling for often-funky public RSS feeds.`,
     start: { year: 2019, month: 12 },
     end: { year: 2023, month: 2 },
   },
   {
     institution: "Evil Genius Technologies",
     role: "Lead Mobile Developer",
-    description: `Custom design of 30+ iOS apps for domestic + international clients, private + nonprofit.
-
-Full-stack coding (and team oversight) using primary tech stack: Objective-C, Amazon Web Services, ASP.NET, SQL Server, HTML/CSS, innumerable API integrations per client specs.`,
+    description: `Led the design and implementation for dozens of iOS apps for domestic and international clients, typically small to mid-size businesses and nonprofits without in-house developers.\n
+    Full-stack coding (and dev-team oversight) using primary tech stack: Objective-C, AWS, .NET, SQL Server, Responsive CSS, API integrations per client specs.`,
     start: { year: 2010, month: 11 },
-    end: { year: 2016, month: 8 },
+    end: { year: 2017, month: 3 },
   },
   {
     institution: "Smart Drug Smarts",
     role: "Podcast Host + Producer",
-    description: `I was a podcaster before it was cool.  5+ million downloads, reaching ~35,000 per week at my peak. 
-Did related programming, including an extremely customized Wordpress site (PHP, MySQL) plus a dedicated iOS app (Objective-C).`,
+    description: `Headlined a weekly podcast back before everyone had a podcast.  Over 5 million downloads, eventually reaching ~35,000 per week.\n
+Associated programming included a highly-custom Wordpress site (PHP, MySQL) and a dedicated iOS app (Objective-C).`,
     start: { year: 2012, month: 11 },
     end: { year: 2018, month: 5 },
   },
   {
     institution: "Antibody Films",
     role: "Film Producer",
-    description: `Financed + Produced various “schlock” films, in genres ranging from kids comedy to fast-zombie horror.   
-Oversaw editing + visual effects (Final Cut Pro) and associated marketing on the teenage web (ASP.NET, Wordpress, etc.).`,
+    description: `Financed and produced “schlock” films in genres ranging from kids comedy to zombie horror.\n
+Led technical editing + visual effects teams and online marketing with then-current tools (ASP.NET, Wordpress, etc.).`,
     start: { year: 2005, month: 10 },
     end: { year: 2011, month: 12 },
   },
@@ -612,7 +611,9 @@ class App extends Component<AppProps, AppState> {
                           </div>
                         </AccordionSummary>
                         <AccordionDetails className="description">
-                          {e.description}
+                          {e.description.split("\n").map((line: string) => (
+                            <p key={`line-${line}`}>{line}</p>
+                          ))}
                         </AccordionDetails>
                       </Accordion>
                     </div>
@@ -710,11 +711,13 @@ class App extends Component<AppProps, AppState> {
                   Humanity
                 </h1>
                 <div id="short-bio">
-                  I’ve bicycled from Los Angeles to Florida, use Photoshop at a
-                  professional level, and have hand-coded Bitcoin transactions.
-                  (Despite this, my kids still maintain I’m not all that cool.)
-                  Also, I wake up extremely early - basically living in the East
-                  Coast time zone from the West Coast.
+                  <p>
+                    When not at the computer, I have bicycled cross-country from
+                    San Diego to Florida, climbed the highest mountain in the
+                    lower 48 states, and organized zombie flash-mobs in Los
+                    Angeles.
+                  </p>
+                  <p>I am occasionally mistaken for Trent Reznor.</p>
                 </div>
               </Grid>
               <Grid item md={4} xs={12}>
