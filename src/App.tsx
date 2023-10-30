@@ -41,6 +41,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCoffee,
   faDatabase,
+  faScroll,
   faSpaghettiMonsterFlying,
   faTerminal,
   faUserGraduate,
@@ -155,10 +156,11 @@ const CORVALLIS_DUTCH_BROS: LocationCoordinates = {
 const EDUCATION: Experience[] = [
   {
     institution: "University of Oregon",
-    role: "Computer Science, Bachelor of Arts",
-    description: `I attended Clark Honors College - a highly selective sub-unit within the larger university - graduating with a 3.98 final cumulative GPA.  (Despite collegiate “grade inflation” in recent years, back in 1997 a 3.98 GPA meant something.)`,
-    start: { year: 1994, month: 9 },
-    end: { year: 1997, month: 5 },
+    role: "Computer Science\nBachelor of Arts",
+    description: `I graduated university with a 3.98 final cumulative GPA -- 
+    back in the before-times when a 4.0 GPA was the maximum possible.`,
+    //start: { year: 1994, month: 9 },
+    //end: { year: 1997, month: 5 },
   },
 ];
 
@@ -372,7 +374,6 @@ const SKILLS: Skill[] = [
   },
   { name: "Yarn", icon: "yarn", url: "https://yarnpkg.com/", priority: 7 },
 ];
-// JESSEFIX and the nether regions of Xcode and Android Developer Studio.  (Experience varies from 20+ years for oldies like SQL/Bash to 3 years for newer stuff; React-Native + TypeScript are where my tools are sharpest at present.)
 
 const getLongMonthName = (date: any) => MONTH_NAMES[date.getMonth()];
 
@@ -594,13 +595,20 @@ class App extends Component<AppProps, AppState> {
                           aria-controls={`experience-panel-${index}-content`}
                         >
                           <div className="institution">{e.institution}</div>
-                          <div className="role">{e.role}</div>
+                          <p className="role">{e.role}</p>
                           <div className="period">
-                            {`${getLongMonthName(
-                              new Date(e.start.year, e.start.month)
-                            )} ${e.start.year}  - ${getLongMonthName(
-                              new Date(e.end.year, e.end.month)
-                            )} ${e.end.year}`}
+                            {e.start === undefined
+                              ? ""
+                              : `${getLongMonthName(
+                                  new Date(e.start.year, e.start.month)
+                                )} ${e.start.year} - `}
+                            {e.end === undefined
+                              ? ""
+                              : getLongMonthName(
+                                  new Date(e.end.year, e.end.month)
+                                ) +
+                                " " +
+                                e.end.year}
                           </div>
                         </AccordionSummary>
                         <AccordionDetails className="description">
@@ -731,12 +739,8 @@ class App extends Component<AppProps, AppState> {
                     return (
                       <a
                         key={`chip-${index}`}
-                        href="#"
-                        onClick={
-                          skill.url === undefined
-                            ? undefined
-                            : () => openInNewTab(skill.url!)
-                        }
+                        href={skill.url!}
+                        target="_blank"
                       >
                         <Chip
                           label={skill.name}
@@ -775,6 +779,17 @@ class App extends Component<AppProps, AppState> {
                           />
                         </ListItem>
                         <Divider />
+                        <ListItem>
+                          <div className="icon">
+                            <FontAwesomeIcon icon={faScroll} />
+                          </div>
+                          <ListItemText
+                            primary="Senior Thesis Honors"
+                            secondary="Clark Honors College, 1997"
+                          />
+                        </ListItem>
+                        {/*
+                        <Divider />
                         <a
                           onClick={() => {
                             window.open(
@@ -804,7 +819,7 @@ class App extends Component<AppProps, AppState> {
                             );
                           }}
                         >
-                          <ListItem style={{ display: "none" }}>
+                          <ListItem>
                             <div className="icon">
                               <FontAwesomeIcon
                                 icon={faSpaghettiMonsterFlying}
@@ -817,6 +832,7 @@ class App extends Component<AppProps, AppState> {
                             />
                           </ListItem>
                         </a>
+                        */}
                       </List>
                     </Item>
                   </Grid>
@@ -854,13 +870,26 @@ class App extends Component<AppProps, AppState> {
                                 <div className="institution">
                                   {e.institution}
                                 </div>
-                                <div className="role">{e.role}</div>
+                                {e.role
+                                  .split("\n")
+                                  .map((line: string, idx2: number) => (
+                                    <p className="role" key={`line-${idx2}`}>
+                                      {line}
+                                    </p>
+                                  ))}
                                 <div className="period">
-                                  {`${getLongMonthName(
-                                    new Date(e.start.year, e.start.month)
-                                  )} ${e.start.year}  - ${getLongMonthName(
-                                    new Date(e.end.year, e.end.month)
-                                  )} ${e.end.year}`}
+                                  {e.start === undefined
+                                    ? ""
+                                    : `${getLongMonthName(
+                                        new Date(e.start.year, e.start.month)
+                                      )} ${e.start.year} - `}
+                                  {e.end === undefined
+                                    ? ""
+                                    : getLongMonthName(
+                                        new Date(e.end.year, e.end.month)
+                                      ) +
+                                      " " +
+                                      e.end.year}
                                 </div>
                               </AccordionSummary>
                               <AccordionDetails className="description">

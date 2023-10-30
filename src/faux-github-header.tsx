@@ -1,5 +1,7 @@
 import React from "react";
+import DownloadIcon from "@mui/icons-material/Download";
 import PrintIcon from "@mui/icons-material/Print";
+import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -129,7 +131,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
   );
 
   const controlPanel = (
-    <div className="hide-if-printing">
+    <div id="control-panel" className="hide-if-printing">
       <FormGroup row>
         <FormControl>
           <FormControlLabel
@@ -145,18 +147,30 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
           />
         </FormControl>
         <FormControl>
-          <Button
-            id="button-print"
+          <IconButton
             //variant="outlined"
             color="success"
             size="small"
-            startIcon={<PrintIcon />}
+            //startIcon={<DownloadIcon />}
+            aria-label="download"
+            //style={{ width: 100 }}
+            onClick={props.onClickPrint} // JESSEFIX NOW
+          >
+            <DownloadIcon />
+          </IconButton>
+        </FormControl>
+        <FormControl>
+          <IconButton
+            //variant="outlined"
+            color="success"
+            size="small"
+            //startIcon={<PrintIcon />}
             aria-label="print"
-            style={{ width: 100 }}
+            //style={{ width: 100 }}
             onClick={props.onClickPrint}
           >
-            Print
-          </Button>
+            <PrintIcon />
+          </IconButton>
         </FormControl>
       </FormGroup>
     </div>

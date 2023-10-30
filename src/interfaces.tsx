@@ -10,8 +10,8 @@ export interface Experience {
   role: string;
   department?: string;
   description: string;
-  start: Month;
-  end: Month;
+  start?: Month;
+  end?: Month;
 }
 
 export interface Skill {

@@ -151,10 +151,14 @@ a .main {
 }
 
 .experience .role {
+  margin: 0px;
   font-size: 1.2em;
   font-weight: 400;
   color: white;
-  margin-bottom: 3px;
+}
+
+.experience .role:last-of-type {
+  margin-bottom: 4px;
 }
 
 .experience .period {
@@ -274,13 +278,19 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   }
 }
 
-#button-print {
+#control-panel button {
   color: #ffffffee;
   font-size: 0.8rem;
   font-weight: 400;
+  margin-top: -3px;
+  margin-right: 5px;
 }
 
-#button-print svg {
+#control-panel button svg {
+  width: 20px;
+}
+
+#control-panel button:hover svg {
   color: rgba(0, 238, 0, 0.8);
 }
 
@@ -383,6 +393,7 @@ a:hover .MuiListItem-root .MuiListItemText-secondary {
   margin-top: 7px;
   text-align: left;
   opacity: 0.8;
+  padding: 0px 5px;
 }
 
 label#toggle-show-all-panels {
