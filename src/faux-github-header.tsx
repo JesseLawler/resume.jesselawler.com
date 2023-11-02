@@ -153,7 +153,7 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
             size="small"
             //startIcon={<DownloadIcon />}
             aria-label="download"
-            //style={{ width: 100 }}
+            style={{ display: "none" }} // JESSEFIX NOW
             onClick={props.onClickPrint} // JESSEFIX NOW
           >
             <DownloadIcon />

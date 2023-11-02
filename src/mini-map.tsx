@@ -234,6 +234,14 @@ export const MiniMap: React.FC<Props> = (props: Props): JSX.Element => {
           )}
         </GoogleMap>
       </div>
+      <div className="show-only-if-printing">
+        <img
+          src="/images/map-corvallis.png"
+          alt="map"
+          width="100%"
+          height="100%"
+        />
+      </div>
     </List>
   );
 };

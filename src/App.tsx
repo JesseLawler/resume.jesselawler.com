@@ -472,7 +472,7 @@ const isDev = () =>
 
 function Copyright() {
   return (
-    <div id="copyright">
+    <div id="copyright" className="hide-if-printing">
       <Typography variant="body2" align="center">
         copyright © Jesse Lawler {new Date().getFullYear()}
         <span style={{ margin: "0px 10px 0px 14px" }}>&bull;</span>

@@ -420,6 +420,10 @@ label#toggle-show-all-panels .MuiTypography-root {
   margin: 0px 0px 0px 3px;
 }
 
+.show-only-if-printing {
+  display: none;
+}
+
 /* override styles when narrow - collapsing grid to 2 columns */
 @media (max-width: 899px) {
   .chip-party {
@@ -444,5 +448,9 @@ label#toggle-show-all-panels .MuiTypography-root {
 
   .hide-if-printing {
     display: none;
+  }
+
+  .show-only-if-printing {
+    display: block;
   }
 }
