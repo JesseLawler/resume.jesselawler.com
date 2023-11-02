@@ -20,6 +20,8 @@ const SHOW_CONTROLS = true;
 
 type FauxGithubHeaderProps = {
   width?: number;
+  downloadFileName?: string;
+  downloadFilePath?: string;
   onClickPrint?: () => void;
   onToggleShowAll?: () => void;
 };
@@ -147,17 +149,23 @@ export const FauxGithubHeader: React.FC<FauxGithubHeaderProps> = (
           />
         </FormControl>
         <FormControl>
-          <IconButton
-            //variant="outlined"
-            color="success"
-            size="small"
-            //startIcon={<DownloadIcon />}
-            aria-label="download"
-            style={{ display: "none" }} // JESSEFIX NOW
-            onClick={props.onClickPrint} // JESSEFIX NOW
+          <a
+            href={props.downloadFilePath}
+            download={props.downloadFileName}
+            target="_blank"
+            rel="noreferrer"
           >
-            <DownloadIcon />
-          </IconButton>
+            <IconButton
+              //variant="outlined"
+              color="success"
+              size="small"
+              //startIcon={<DownloadIcon />}
+              aria-label="download"
+              //style={{ display: "none" }}
+            >
+              <DownloadIcon />
+            </IconButton>
+          </a>
         </FormControl>
         <FormControl>
           <IconButton

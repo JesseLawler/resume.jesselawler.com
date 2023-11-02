@@ -68,6 +68,7 @@ import FauxGithubHeader from "./faux-github-header";
 import { GoogleApiCodeLoader } from "./google-api-code-loader";
 import { LocationCoordinates, MiniMap } from "./mini-map";
 import { SimpleDialog } from "./qr-code-dialog";
+import ResumePDF from "./assets/pdf/Jesse-Lawler-resume.pdf";
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
@@ -559,6 +560,8 @@ class App extends Component<AppProps, AppState> {
             <Grid container spacing={2}>
               <Grid item xs={12} style={{ marginBottom: 36 }}>
                 <FauxGithubHeader
+                  downloadFileName={"Jesse-Lawler-resume.pdf"}
+                  downloadFilePath={ResumePDF}
                   onToggleShowAll={this.handleToggleShowAll}
                   onClickPrint={this.handleClickPrint}
                 />
