@@ -229,20 +229,32 @@ const SKILLS: Skill[] = [
     icon: "typescript",
     url: "https://www.typescriptlang.org/",
   },
-
   {
     name: "Lambda",
     icon: "aws",
     url: "https://aws.amazon.com/lambda/",
     priority: 3,
   },
-
   {
     name: "Node.js",
     level: 6,
     icon: "node-js",
     url: "https://nodejs.org/",
     priority: 2,
+  },
+  {
+    name: "Redux",
+    level: 5,
+    icon: "redux",
+    url: "https://redux.js.org/",
+    priority: 3,
+  },
+  {
+    name: "MobX",
+    level: 4,
+    icon: "mobx",
+    url: "https://mobx.js.org/",
+    priority: 3,
   },
   {
     name: "CloudFormation",
@@ -425,6 +437,14 @@ const icon = (iconName?: string) => {
       return <FontAwesomeIcon icon={faLess} />;
     case "linkedin":
       return <LinkedInIcon />;
+    case "mobx":
+      return (
+        <img
+          src="/images/logos/mobx.png"
+          alt="MobX logo"
+          style={{ height: 15, marginLeft: 9 }}
+        />
+      );
     case "node-js":
       return <FontAwesomeIcon icon={faNodeJs} />;
     case "phone":
@@ -439,6 +459,14 @@ const icon = (iconName?: string) => {
       );
     case "react":
       return <FontAwesomeIcon icon={faReact} />;
+    case "redux":
+      return (
+        <img
+          src="/images/logos/redux.png"
+          alt="Redux logo"
+          style={{ height: 16, marginLeft: 9 }}
+        />
+      );
     case "sails.js":
       return (
         <img
