@@ -108,6 +108,8 @@ const MONTH_NAMES = [
   "December",
 ];
 
+const SOURCE_CODE_INCLUDES_API_KEYS = false;
+
 const CONTACT_LIST: MeansOfContact[] = [
   {
     name: "Phone",
@@ -500,25 +502,29 @@ const isDev = () =>
   window.location.href.substring(0, 16) === "http://localhost";
 
 function Copyright() {
+  const sourceCodeLink = SOURCE_CODE_INCLUDES_API_KEYS ? null : (
+    <>
+      <span style={{ margin: "0px 10px 0px 14px" }}>&bull;</span>
+      <a
+        href="https://github.com/JesseLawler/resume.jesselawler.com"
+        target="_blank"
+      >
+        <CodeIcon
+          style={{
+            marginLeft: 1,
+            marginRight: 5,
+            marginBottom: -7,
+            width: 22,
+          }}
+        />
+        view source code
+      </a>
+    </>
+  );
   return (
     <div id="copyright" className="hide-if-printing">
       <Typography variant="body2" align="center">
         copyright © Jesse Lawler {new Date().getFullYear()}
-        <span style={{ margin: "0px 10px 0px 14px" }}>&bull;</span>
-        <a
-          href="https://github.com/JesseLawler/resume.jesselawler.com"
-          target="_blank"
-        >
-          <CodeIcon
-            style={{
-              marginLeft: 1,
-              marginRight: 5,
-              marginBottom: -7,
-              width: 22,
-            }}
-          />
-          view source code
-        </a>
       </Typography>
     </div>
   );
